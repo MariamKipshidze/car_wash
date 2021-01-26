@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.db.models.constraints import UniqueConstraint
 from django.db.models.query_utils import Q
+from django.contrib.auth.models import User
 
 
 class Location(models.Model):
@@ -16,8 +17,10 @@ class Location(models.Model):
 
      
 class Branch(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Company"))
     title = models.CharField(max_length = 255, verbose_name=_('Branch'))
     location = models.OneToOneField(Location, on_delete = models.PROTECT, verbose_name = _("Location"))
+    image = models.ImageField(null = True, blank = True, upload_to = "media/pictures", verbose_name=_("Image"))
 
     def __str__(self):
         return self.title
@@ -30,6 +33,7 @@ class Branch(models.Model):
 class Employee(models.Model):
     full_name = models.CharField(_("Full Name"), max_length = 255)
     age = models.PositiveSmallIntegerField(_("Age"))
+    mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Name"))
     manager = models.BooleanField(default = False, verbose_name = _("Manager"))
     branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"))
 
