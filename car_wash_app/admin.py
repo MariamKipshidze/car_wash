@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Employee, Location, Branch
+from .models import CompanyProfile
 
 
 @admin.register(Employee)
@@ -19,3 +20,9 @@ class BranchModelAdmin(admin.ModelAdmin):
     search_fields = ("title",)
     list_display = ["title", "location",]
     fields = ["title", "location"]
+
+
+@admin.register(CompanyProfile)
+class CompanyProfileModelAdmin(admin.ModelAdmin):
+    search_fields = ("user",)
+    list_display = ["user",]
