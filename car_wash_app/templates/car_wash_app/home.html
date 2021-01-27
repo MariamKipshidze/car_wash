@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+  {% for branch in branches %}
+  <article class="media content-section">
+      <img class = "rounded-circle article-img" src = "{{ post.author.profile.image.url }}">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ branch.user }}</a>
+          <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+        </div>
+        <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ branch.title }}</a></h2>
+        <p class="article-content">{{ branch.location }}</p>
+        {% if branch.image %}
+          <img class = "article-img" src = "{{ branch.image.url }}">
+        {% endif %}
+      </div>
+    </article>
+  {% endfor %}
+{% endblock content%}
