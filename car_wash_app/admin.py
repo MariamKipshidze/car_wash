@@ -18,8 +18,7 @@ class LocationModelAdmin(admin.ModelAdmin):
 @admin.register(Branch)
 class BranchModelAdmin(admin.ModelAdmin):
     search_fields = ("title",)
-    list_display = ["title", "location",]
-    fields = ["title", "location"]
+    list_display = ["company","title", "location",]
 
 
 @admin.register(CompanyProfile)
