@@ -22,23 +22,23 @@ def detail(request, pk):
 
 @login_required
 def profile(request):
+    user_update_form = UserUpdateForm(instance=request.user)
+    profile_update_form = ProfileUpdateForm(instance=request.user.companyprofile)
+    
     if request.method == "POST":
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.companyprofile)
+        user_update_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_update_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.companyprofile)
 
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
+        if user_update_form.is_valid() and profile_update_form.is_valid():
+            user_update_form.save()
+            profile_update_form.save()
             messages.success(request, f"your account has been updated!")
             return redirect("profile")
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.companyprofile)
 
 
     context = {
-        "u_form": u_form,
-        "p_form": p_form
+        "user_update_form": user_update_form,
+        "profile_update_form": profile_update_form
     }
 
     return render(request, "car_wash_app/profile.html", context)
