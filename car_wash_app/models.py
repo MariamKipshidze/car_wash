@@ -37,7 +37,7 @@ class Employee(models.Model):
     age = models.PositiveSmallIntegerField(_("Age"))
     mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"))
     manager = models.BooleanField(default = False, verbose_name = _("Manager"))
-    branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"))
+    branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"), related_name="branch")
 
     class Meta:
         verbose_name = 'Employee'
