@@ -18,9 +18,10 @@ class Location(models.Model):
 
      
 class Branch(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Company"))
+    company = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Company"))
     title = models.CharField(max_length = 255, verbose_name=_('Branch'))
     location = models.OneToOneField(Location, on_delete = models.PROTECT, verbose_name = _("Location"))
+    description = models.TextField(verbose_name=_("Description"))
     image = models.ImageField(null = True, blank = True, upload_to = "media/pictures", verbose_name=_("Image"))
 
     def __str__(self):
