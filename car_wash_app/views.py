@@ -24,7 +24,7 @@ def detail(request, pk):
 def profile(request):
     if request.method == "POST":
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.companyprofile)
 
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
@@ -33,7 +33,7 @@ def profile(request):
             return redirect("profile")
     else:
         u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+        p_form = ProfileUpdateForm(instance=request.user.companyprofile)
 
 
     context = {
