@@ -84,6 +84,7 @@ class Order(models.Model):
     customer = models.CharField(max_length=100, verbose_name=_("Customer"))
     branch = models.ForeignKey(Branch, verbose_name=_("Branch"), on_delete=models.CASCADE)
     order_date = models.DateTimeField()
+    finish_date = models.DateTimeField()
     employee = models.ForeignKey(Employee, verbose_name=_("Employee"), on_delete=models.PROTECT, related_name="order")
     car = models.ForeignKey(Car, verbose_name=_("Car"), on_delete=models.PROTECT)
 
@@ -91,5 +92,8 @@ class Order(models.Model):
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
         unique_together = ['employee', 'order_date']
+
+    def __str__(self):
+        return self.customer
 
 

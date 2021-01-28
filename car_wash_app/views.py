@@ -1,10 +1,11 @@
-import datetime
+import datetime 
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Branch, Employee
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
+from django.utils import timezone
 
 
 def home(request):
@@ -23,7 +24,12 @@ def detail(request, pk):
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
             order = order_form.form.save(commit=False)
+
+            order_date = order_form.cleaned_data["order_date"]
+            order.finish_date = order_date + datetime.timedelta(minutes = 30)
+
             order.branch = branch
+
             order_form.save()
             messages.success(request, f"Successfully booked!")
             return redirect("branch-detail")
@@ -34,15 +40,37 @@ def detail(request, pk):
         'order_form': order_form
     })
 
-@login_required
+
 def employee_detail(request, pk):
-    employee = get_object_or_404(Employee, id = pk)
+    employee = get_object_or_404(Employee, id=pk)
     orders  = employee.order.all()
+    week_orders = 0
+    month_orders = 0
+    year_orders = 0
+
+    for order in orders:
+        difference = order.order_date - timezone.now()
+        difference = difference.days
+
+        if difference >= 7:
+            month_orders += 1
+            year_orders += 1
+        elif difference >= 30:
+            year_order += 1
+        else:
+            week_orders += 1
+            month_orders += 1
+            year_orders += 1
+
 
     return render(request, 'car_wash_app/employee_detail.html', context={
         'employee': employee,
-        'order': orders
+        'orders': orders,
+        'week_orders': week_orders,
+        'month_orders': month_orders,
+        'year_orders': year_orders
     })
+
 
 @login_required
 def profile(request):

@@ -36,4 +36,4 @@ class CarModelAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderModelAdmin(admin.ModelAdmin):
     search_fields = ("branch",)
-    list_display = [ "branch", "customer", "order_date", ]
+    list_display = [ "branch", "customer", "order_date", "finish_date", ]
