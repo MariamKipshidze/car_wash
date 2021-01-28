@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Branch, Employee
-from .forms import ProfileUpdateForm, UserUpdateForm
+from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
 
 
 def home(request):
@@ -16,9 +16,21 @@ def home(request):
 def detail(request, pk):
     branch = get_object_or_404(Branch, id=pk)
     employees = branch.branch.all()
+    order_form = OrderForm()
+
+    if request.method == "POST":
+        order_form = OrderForm(request.POST)
+        if order_form.is_valid():
+            order = order_form.form.save(commit=False)
+            order.branch = branch
+            order_form.save()
+            messages.success(request, f"Successfully booked!")
+            return redirect("branch-detail")
+
     return render(request, 'car_wash_app/branch_detail.html', context={
         'branch': branch,
-        'employees': employees
+        'employees': employees,
+        'order_form': order_form
     })
 
 @login_required

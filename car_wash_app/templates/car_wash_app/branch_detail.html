@@ -20,4 +20,9 @@
       {% endfor %}
     </div>
 </article>
+<form action="" method="post">
+  {% csrf_token %}
+  {{ order_form }}
+  <input type="submit" value="Submit">
+</form>
 {% endblock content%}
