@@ -7,6 +7,8 @@ from .models import Branch, Employee, Order
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
 from django.utils import timezone
 from django.db.models import Count
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def home(request):
@@ -24,7 +26,7 @@ def detail(request, pk):
     if request.method == "POST":
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            order = order_form.form.save(commit=False)
+            order = order_form.save(commit=False)
 
             order_date = order_form.cleaned_data["order_date"]
             order.finish_date = order_date + datetime.timedelta(minutes = 30)
@@ -33,7 +35,7 @@ def detail(request, pk):
 
             order_form.save()
             messages.success(request, f"Successfully booked!")
-            return redirect("branch-detail")
+            return HttpResponseRedirect(reverse("branch-detail", args=[str(pk)]))
 
     return render(request, 'car_wash_app/branch_detail.html', context={
         'branch': branch,
