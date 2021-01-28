@@ -16,7 +16,7 @@
       <p class="article-content">{{ branch.location }}</p>
       <p class="article-content">{{ branch.description }}</p>
       {% for employee in employees %}
-        <p class="article-content">{{ employee.full_name}}  |  {{employee.mobile_number}}</p>
+        <a class="nav-item nav-link" href="{% url 'employee-detail' %}">{{ employee.full_name}}</a>
       {% endfor %}
     </div>
 </article>

@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -31,6 +32,16 @@ def detail(request, pk):
         'branch': branch,
         'employees': employees,
         'order_form': order_form
+    })
+
+@login_required
+def employee_detail(request, pk):
+    employee = get_object_or_404(Employee, id = pk)
+    orders  = employee.order.all()
+
+    return render(request, 'car_wash_app/employee_detail.html', context={
+        'employee': employee,
+        'order': orders
     })
 
 @login_required
