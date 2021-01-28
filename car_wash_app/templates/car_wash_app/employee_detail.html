@@ -1,7 +1,11 @@
 {% extends "car_wash_app/base.html" %}
 {% block content %}
 <article class="media content-section">
-    <p>Number of cars: {{orders}}</p>
-    
+    <div>
+        <p>Total number of washed cars: {{orders}}</p>
+        <p>Number of cars washed in the last week: {{week_orders}}</p>
+        <p>Number of cars washed in the last month: {{month_orders}}</p>
+        <p>Number of cars washed in the last year: {{year_orders}}</p>
+    </div>
 </article>
 {% endblock content%}

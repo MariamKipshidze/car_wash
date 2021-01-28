@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Branch, Employee
+from .models import Branch, Employee, Order
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
 from django.utils import timezone
-from django.db.models import Count, Q
+from django.db.models import Count
 
 
 def home(request):
@@ -45,11 +45,16 @@ def detail(request, pk):
 def employee_detail(request, pk):
     employee = get_object_or_404(Employee, id=pk)
     orders  = employee.order.all().count()
-
+    week_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(weeks=1))).count()
+    month_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=30))).count()
+    year_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=365))).count()
 
     return render(request, 'car_wash_app/employee_detail.html', context={
         'employee': employee,
         'orders': orders,
+        'week_orders': week_orders,
+        'month_orders': month_orders,
+        'year_orders': year_orders,
     })
 
 
