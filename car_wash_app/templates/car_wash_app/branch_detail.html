@@ -1,4 +1,5 @@
 {% extends "car_wash_app/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 <article class="media content-section">
     <img class = "rounded-circle article-img" src = "{{ branch.company.companyprofile.image.url }}">
@@ -22,7 +23,7 @@
 </article>
 <form action="" method="post">
   {% csrf_token %}
-  {{ order_form }}
+  {{ order_form|crispy}}
   <input type="submit" value="Submit">
 </form>
 {% endblock content%}
