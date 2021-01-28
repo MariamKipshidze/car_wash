@@ -1,12 +1,7 @@
 {% extends "car_wash_app/base.html" %}
 {% block content %}
 <article class="media content-section">
-    <p>Number of cars washed in one week: {{week_orders}}</p>
-    <p>Number of cars washed in one month: {{month_orders}}</p>
-    <p>Number of cars washed in one year: {{year_orders}}</p>
-    {% for order in orders %}
-      <p>{{ order.order_date |date:"F d, Y" }}</p>
-    {% endfor %}
+    <p>Number of cars: {{orders}}</p>
     
 </article>
 {% endblock content%}

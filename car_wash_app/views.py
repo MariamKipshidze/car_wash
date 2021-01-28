@@ -6,6 +6,7 @@ from django.contrib import messages
 from .models import Branch, Employee
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
 from django.utils import timezone
+from django.db.models import Count, Q
 
 
 def home(request):
@@ -43,32 +44,12 @@ def detail(request, pk):
 
 def employee_detail(request, pk):
     employee = get_object_or_404(Employee, id=pk)
-    orders  = employee.order.all()
-    week_orders = 0
-    month_orders = 0
-    year_orders = 0
-
-    for order in orders:
-        difference = order.order_date - timezone.now()
-        difference = difference.days
-
-        if difference >= 7:
-            month_orders += 1
-            year_orders += 1
-        elif difference >= 30:
-            year_order += 1
-        else:
-            week_orders += 1
-            month_orders += 1
-            year_orders += 1
+    orders  = employee.order.all().count()
 
 
     return render(request, 'car_wash_app/employee_detail.html', context={
         'employee': employee,
         'orders': orders,
-        'week_orders': week_orders,
-        'month_orders': month_orders,
-        'year_orders': year_orders
     })
 
 

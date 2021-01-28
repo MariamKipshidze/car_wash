@@ -5,7 +5,6 @@ from django.db.models.query_utils import Q
 from django.contrib.auth.models import User
 from PIL import Image
 
-
 class Location(models.Model):
     city = models.CharField(max_length = 255, verbose_name = _("City"))
     street_address = models.CharField(max_length = 255, verbose_name = _('Street Address'))
@@ -95,5 +94,6 @@ class Order(models.Model):
 
     def __str__(self):
         return self.customer
+
 
 
