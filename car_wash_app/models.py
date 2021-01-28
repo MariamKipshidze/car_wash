@@ -65,3 +65,29 @@ class CompanyProfile(models.Model):
             output_size = (300,300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+class Car(models.Model):
+    id_number = models.SmallIntegerField(_("ID Number"))
+    model_type = models.CharField(_("Car Model"), max_length=100)
+    washing_cost = models.SmallIntegerField(_("Cost"))
+
+    def __str__(self):
+        return self.model_type
+
+    class Meta:
+        verbose_name = 'Car'
+        verbose_name_plural = 'Cars'
+
+
+class Order(models.Model):
+    branch = models.ForeignKey(Branch, verbose_name=_("Branch"), on_delete=models.CASCADE)
+    order_date = models.DateTimeField()
+    employee = models.ForeignKey(Employee, verbose_name=_("Employee"), on_delete=models.PROTECT)
+    car = models.ForeignKey(Car, verbose_name=_("Car"), on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
+
+
