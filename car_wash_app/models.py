@@ -81,6 +81,7 @@ class Car(models.Model):
 
 
 class Order(models.Model):
+    customer = models.CharField(max_length=100, verbose_name=_("Customer"))
     branch = models.ForeignKey(Branch, verbose_name=_("Branch"), on_delete=models.CASCADE)
     order_date = models.DateTimeField()
     employee = models.ForeignKey(Employee, verbose_name=_("Employee"), on_delete=models.PROTECT)

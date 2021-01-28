@@ -33,7 +33,7 @@ class CarModelAdmin(admin.ModelAdmin):
     list_display = ["id_number", "model_type", "washing_cost", ]
 
 
-@admin.register(Car)
+@admin.register(Order)
 class OrderModelAdmin(admin.ModelAdmin):
     search_fields = ("branch",)
-    list_display = [ "branch", "order_date" ,]
+    list_display = [ "branch", "customer", "order_date", ]

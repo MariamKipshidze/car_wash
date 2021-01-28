@@ -20,4 +20,4 @@ class ProfileUpdateForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ('order_date', 'employee', 'car',)
+        fields = ('customer', 'order_date', 'employee', 'car',)
