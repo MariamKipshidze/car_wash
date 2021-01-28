@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Employee, Location, Branch
-from .models import CompanyProfile
+from .models import CompanyProfile, Order, Car
 
 
 @admin.register(Employee)
@@ -25,3 +25,15 @@ class BranchModelAdmin(admin.ModelAdmin):
 class CompanyProfileModelAdmin(admin.ModelAdmin):
     search_fields = ("user",)
     list_display = ["user",]
+
+
+@admin.register(Car)
+class CarModelAdmin(admin.ModelAdmin):
+    search_fields = ("model_type",)
+    list_display = ["id_number", "model_type", "washing_cost", ]
+
+
+@admin.register(Car)
+class OrderModelAdmin(admin.ModelAdmin):
+    search_fields = ("branch",)
+    list_display = [ "branch", "order_date" ,]
