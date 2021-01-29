@@ -16,6 +16,9 @@
       <h2 class="article-title" >{{ branch.title }}</h2>
       <p class="article-content">{{ branch.location }}</p>
       <p class="article-content">{{ branch.description }}</p>
+      {% if branch.image %}
+          <img class = "article-img" src = "{{ branch.image.url }}">
+      {% endif %}
       {% for employee in employees %}
         <a class="nav-item nav-link" href="{% url 'employee-detail' employee.id %}">{{ employee.full_name}}</a>
       {% endfor %}
