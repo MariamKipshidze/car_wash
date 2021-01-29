@@ -21,7 +21,7 @@ def home(request):
 def detail(request, pk):
     branch = get_object_or_404(Branch, id=pk)
     employees = branch.branch.all()
-    order_form = OrderForm()
+    order_form = OrderForm(branch)
 
     if request.method == "POST":
         order_form = OrderForm(request.POST)
