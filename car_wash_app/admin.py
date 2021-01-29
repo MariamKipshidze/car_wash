@@ -30,7 +30,7 @@ class CompanyProfileModelAdmin(admin.ModelAdmin):
 @admin.register(Car)
 class CarModelAdmin(admin.ModelAdmin):
     search_fields = ("model_type",)
-    list_display = ["id_number", "model_type", "washing_cost", ]
+    list_display = ["brand", "model_type", "washing_cost", ]
 
 
 @admin.register(Order)

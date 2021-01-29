@@ -22,7 +22,6 @@ class OrderForm(forms.ModelForm):
         super(OrderForm, self).__init__(*args, **kwargs)
         self.fields['employee'].queryset = self.fields['employee'].queryset.filter(branch = current_branch)
 
-
     class Meta:
         model = Order
         fields = ('customer', 'order_date', 'employee', 'car',)

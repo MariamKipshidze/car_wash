@@ -67,7 +67,7 @@ class CompanyProfile(models.Model):
 
 
 class Car(models.Model):
-    id_number = models.SmallIntegerField(_("ID Number"))
+    brand = models.CharField(_("Brand"), max_length=100)
     model_type = models.CharField(_("Car Model"), max_length=100)
     washing_cost = models.SmallIntegerField(_("Cost"))
 
