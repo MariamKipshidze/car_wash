@@ -125,7 +125,7 @@ def employee_register(request, pk):
             employee_profile_register_form.save()
             
             messages.success(request, f"The employee was successfully registered")
-            return redirect("profile")
+            return HttpResponseRedirect(reverse("employee-register", args=[str(pk)]))
 
     return render(request, "car_wash_app/employee_register.html",context={
         "employee_register_form": employee_register_form,
