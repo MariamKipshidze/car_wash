@@ -6,9 +6,17 @@
     <form method = "POST">
         {% csrf_token %}
         {{employee_register_form|crispy}}
+        <div class = "form-group">
+            <button class = "btn btn-outline-info" type = "submit">Register</button>
+        </div>
+    </form>
+</div>
+<div class = "content-section">
+    <form method = "POST">
+        {% csrf_token %}
         {{employee_profile_register_form|crispy}}
         <div class = "form-group">
-            <button class = "btn btn-outline-info" type = "submit"> Sign Up</button>
+            <button class = "btn btn-outline-info" type = "submit">Create</button>
         </div>
     </form>
 </div>
