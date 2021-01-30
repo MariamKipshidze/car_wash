@@ -31,7 +31,7 @@ class CompanyProfileModelAdmin(admin.ModelAdmin):
 @admin.register(CarType)
 class CarTypeModelAdmin(admin.ModelAdmin):
     search_fields = ("model_type",)
-    list_display = [ "model_type", "washing_cost", ]
+    list_display = [ "model_type", "washing_cost", "company" ]
 
 
 @admin.register(Car)
@@ -49,7 +49,7 @@ class CouponModelAdmin(admin.ModelAdmin):
 @admin.register(WashType)
 class WashTypeModelAdmin(admin.ModelAdmin):
     search_fields = ("name",)
-    list_display = [ "name", "percentage", ]
+    list_display = [ "name", "percentage", "company" ]
 
 
 @admin.register(Order)
