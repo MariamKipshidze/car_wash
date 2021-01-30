@@ -28,7 +28,7 @@ class EmployeeProfileRegisterForm(forms.ModelForm):
 
     class Meta:
         model = EmployeeProfile
-        fields = ["employee", "full_name", "age", "mobile_number", "manager", "branch", "salary",]
+        fields = ["employee", "full_name", "age", "mobile_number", "manager", "salary",]
 
 
 class UserUpdateForm(forms.ModelForm):
