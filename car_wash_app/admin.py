@@ -7,7 +7,7 @@ from .models import Car, Coupon, WashType
 @admin.register(EmployeeProfile)
 class EmployeeModelAdmin(admin.ModelAdmin):
     search_fields = ("full_name",)
-    list_display = ["full_name", "branch", "manager",]
+    list_display = ["full_name", "branch", "manager", "order_percentage"]
 
 
 @admin.register(Location)

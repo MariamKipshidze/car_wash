@@ -58,6 +58,7 @@ class EmployeeProfile(models.Model):
     manager = models.BooleanField(default = False, verbose_name = _("Manager"))
     branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"), related_name="branch")
     salary = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Salary'), help_text='in Lari')
+    order_percentage = models.IntegerField(verbose_name=_("Percentage of order price"))
 
     class Meta:
         constraints = [
