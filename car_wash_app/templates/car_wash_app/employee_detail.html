@@ -2,10 +2,11 @@
 {% block content %}
 <article class="media content-section">
     <div>
-        <p>Total number of washed cars: {{orders}}</p>
-        <p>Number of cars washed in the last week: {{week_orders}}</p>
-        <p>Number of cars washed in the last month: {{month_orders}}</p>
-        <p>Number of cars washed in the last year: {{year_orders}}</p>
+        {% for order in orders %}
+         <div>
+           <p> {{order.start_date }}</p>
+         </div>
+        {% endfor %}
     </div>
 </article>
 {% endblock content%}

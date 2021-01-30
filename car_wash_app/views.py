@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Branch, EmployeeProfile, Order
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
-from .forms import CompanyRegisterForm
+from .forms import CompanyRegisterForm, OrderFilterChoice
 from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponseRedirect
@@ -45,19 +45,26 @@ def detail(request, pk):
     })
 
 
+@login_required
 def employee_profile(request, pk):
     employee = get_object_or_404(EmployeeProfile, id=pk)
     orders  = employee.order.all().count()
-    week_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(weeks=1))).count()
-    month_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=30))).count()
-    year_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=365))).count()
+    order_search_form = OrderFilterChoice()
+
+    if request.method == "POST":
+        orders = order_search_form.cleaned_data["order_search"]
+        if orders == Last_week:
+            orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
+        elif orders == Last_Month:
+            orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=30)))
+        elif orders == Last_Year:
+            orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=365)))
+        return HttpResponseRedirect(reverse("employee-detail", args=[str(pk)]))
 
     return render(request, 'car_wash_app/employee_detail.html', context={
         'employee': employee,
         'orders': orders,
-        'week_orders': week_orders,
-        'month_orders': month_orders,
-        'year_orders': year_orders,
+        'order_search_form':order_search_form,
     })
 
 
