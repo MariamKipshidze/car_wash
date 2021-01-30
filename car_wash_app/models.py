@@ -153,6 +153,7 @@ class Order(models.Model):
     class Meta:
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
+        unique_together = ['employee', 'start_date']
 
     def save(self, *args, **kwargs):
         if not self.pk:
