@@ -16,26 +16,9 @@ class Location(models.Model):
         unique_together = ['city', 'street_address']
 
 
-class EmployeeProfile(models.Model):
-    employee = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Employee"))
-    full_name = models.CharField(_("Full Name"), max_length = 255)
-    age = models.PositiveSmallIntegerField(_("Age"))
-    mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"))
-    manager = models.BooleanField(default = False, verbose_name = _("Manager"))
-    branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"), related_name="branch")
-    salary = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Salary'), help_text='in Lari')
-
-    class Meta:
-        constraints = [
-            UniqueConstraint(fields=['branch'], condition=Q(manager=True), name = "unique_together_manager_branch")
-        ]
-        
-    def __str__(self):
-        return self.full_name
-
-
 class CompanyProfile(models.Model):
-    company = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Company"))
+    company = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Company"), related_name="company")
+    name  = models.CharField(max_length=100, verbose_name=_("Company Name"),null = True, blank = True)
     image = models.ImageField(default="default_logo.jpg", upload_to="logo_pics", verbose_name=_("Image"))
     mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"),null = True, blank = True)
 
@@ -53,7 +36,7 @@ class CompanyProfile(models.Model):
 
 
 class Branch(models.Model):
-    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"), related_name="company")
+    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"), related_name="branch")
     title = models.CharField(max_length = 255, verbose_name=_('Branch'))
     location = models.OneToOneField(Location, on_delete = models.PROTECT, verbose_name = _("Location"))
     description = models.TextField(verbose_name=_("Description"))
@@ -65,6 +48,24 @@ class Branch(models.Model):
     class Meta:
         verbose_name = _('Branch')
         verbose_name_plural = _('Branches')
+
+
+class EmployeeProfile(models.Model):
+    employee = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Employee"))
+    full_name = models.CharField(_("Full Name"), max_length = 255)
+    age = models.PositiveSmallIntegerField(_("Age"))
+    mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"))
+    manager = models.BooleanField(default = False, verbose_name = _("Manager"))
+    branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"), related_name="branch")
+    salary = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Salary'), help_text='in Lari')
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['branch'], condition=Q(manager=True), name = "unique_together_manager_branch")
+        ]
+        
+    def __str__(self):
+        return self.full_name
 
 
 class CarType(models.Model):

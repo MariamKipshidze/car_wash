@@ -6,7 +6,9 @@
     <div class="media">
       <img class="rounded-circle account-img" src="{{user.companyprofile.image.url}}">
       <div class="media-body">
-        <h2 class="account-heading">{{ user.username }}</h2>
+        {% if user.company.name %}
+          <h2 class="account-heading">{{ user.copany.name }}</h2>
+        {% endif %}
         <p class="text-secondary">{{ user.email }}</p>
       </div>
     </div>
@@ -21,6 +23,12 @@
           <button class = "btn btn-outline-info" type = "submit"> Update </button>
       </div>
     </form>
+  </div>
+  <div>
+    {% for branch in user.company.branch %}
+      <h3>{{branch.title}}</h3>
+      <p>{{branch.location}}</p>
+    {% endfor %}
   </div>
 
 {% endblock content%}
