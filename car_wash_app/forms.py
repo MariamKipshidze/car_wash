@@ -30,4 +30,4 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ('start_date', 'employee', 'car',)
+        fields = ('start_date', 'employee', 'car', "coupon", "wash_type")
