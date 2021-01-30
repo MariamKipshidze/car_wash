@@ -24,8 +24,8 @@ class BranchModelAdmin(admin.ModelAdmin):
 
 @admin.register(CompanyProfile)
 class CompanyProfileModelAdmin(admin.ModelAdmin):
-    search_fields = ("user",)
-    list_display = ["user",]
+    search_fields = ("company",)
+    list_display = ["company", "mobile_number", ]
 
 
 @admin.register(CarType)
@@ -55,4 +55,4 @@ class WashTypeModelAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderModelAdmin(admin.ModelAdmin):
     search_fields = ("branch",)
-    list_display = [ "branch", "customer", "order_date", "finish_date", ]
+    list_display = [ "branch", "car", "start_date", "end_date", ]

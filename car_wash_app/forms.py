@@ -20,7 +20,7 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = CompanyProfile
-        fields = ["image"]
+        fields = ["image", "mobile_number",]
 
 
 class OrderForm(forms.ModelForm):

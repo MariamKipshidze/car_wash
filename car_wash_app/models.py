@@ -50,8 +50,9 @@ class EmployeeProfile(models.Model):
 
 
 class CompanyProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Company"))
+    company = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Company"))
     image = models.ImageField(default="default_logo.jpg", upload_to="logo_pics", verbose_name=_("Image"))
+    mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"),null = True, blank = True)
 
     def __str__(self):
         return f"{self.user.username} Profile"
@@ -122,6 +123,7 @@ class Order(models.Model):
         to='Car', related_name='orders',
         on_delete=models.PROTECT,
     )
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name=_("Branch"))
     employee = models.ForeignKey(
         to='EmployeeProfile', on_delete=models.SET_NULL,
         null=True, related_name='orders',
