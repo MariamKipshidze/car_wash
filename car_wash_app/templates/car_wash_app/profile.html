@@ -26,7 +26,7 @@
   </div>
   <div>
     {% for branch in user.company.branch %}
-      <h3>{{branch.title}}</h3>
+      <a class="nav-item nav-link" href="{% url 'employee-register' branch.id %}">Add employee in branch {{branch.title}}</a>
       <p>{{branch.location}}</p>
     {% endfor %}
   </div>
