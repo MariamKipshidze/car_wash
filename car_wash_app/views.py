@@ -4,8 +4,10 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Branch, EmployeeProfile, Order
+from .models import CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
 from .forms import CompanyRegisterForm, OrderFilterChoice
+from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm
 from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponseRedirect
@@ -106,5 +108,23 @@ def company_register(request):
 
 
 @login_required
-def employee_register(request):
-    pass
+def employee_register(request, pk):
+    company = get_object_or_404(CompanyProfile, id=pk)
+    employee_register_form = EmployeeRegisterForm()
+    employee_profile_register_form = EmployeeProfileRegisterForm(company)
+
+    if request.method == "POST":
+        employee_register_form = EmployeeRegisterForm(request.POST)
+        employee_profile_register_form = EmployeeProfileRegisterForm(request.POST)
+        if employee_register_form.is_valid() and employee_profile_register_form.is_valid():
+            employee_register_form.save()
+            employee_profile_register_form.save()
+            messages.success(request, f"The employee was successfully registered")
+            return redirect("profile")
+
+    return render(request, "car_wash_app/employee_register.html",context={
+        "employee_register_form": employee_register_form,
+        "employee_profile_register_form": employee_profile_register_form
+        })
+
+

@@ -75,10 +75,6 @@ class CarType(models.Model):
     def __str__(self):
         return self.model_type
 
-    class Meta:
-        verbose_name = _('Car')
-        verbose_name_plural = _('Cars')
-
 
 class WashType(models.Model):
     company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"))
