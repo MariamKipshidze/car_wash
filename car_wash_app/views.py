@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Branch, Employee, Order
+from .models import Branch, EmployeeProfile, Order
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
+from .forms import CompanyRegisterForm
 from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponseRedirect
@@ -29,7 +30,7 @@ def detail(request, pk):
             order = order_form.save(commit=False)
 
             order_date = order_form.cleaned_data["order_date"]
-            order.finish_date = order_date + datetime.timedelta(minutes = 30)
+            order.end_date = order_date + datetime.timedelta(minutes = 30)
 
             order.branch = branch
 
@@ -45,7 +46,7 @@ def detail(request, pk):
 
 
 def employee_detail(request, pk):
-    employee = get_object_or_404(Employee, id=pk)
+    employee = get_object_or_404(EmployeeProfile, id=pk)
     orders  = employee.order.all().count()
     week_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(weeks=1))).count()
     month_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=30))).count()
@@ -82,3 +83,21 @@ def profile(request):
     }
 
     return render(request, "car_wash_app/profile.html", context)
+
+def company_register(request):
+    company_register_form = CompanyRegisterForm()
+    if request.method == "POST":
+        company_register_form = CompanyRegisterForm(request.POST)
+        if company_register_form.is_valid():
+            company_register_form.save()
+            messages.success(request, f"Account created successfully!")
+            return redirect("login")
+
+    return render(request, "car_wash_app/company_register.html",context={
+        "company_register_form": company_register_form
+        })
+
+
+@login_required
+def employee_register(request):
+    pass

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'user.apps.UserConfig',
     'car_wash_app.apps.CarWashAppConfig',
     'crispy_forms',
     'django.contrib.admin',
@@ -125,3 +126,5 @@ import os
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
+
+AUTH_USER_MODEL = 'user.User'

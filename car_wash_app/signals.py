@@ -1,11 +1,11 @@
 from django.db.models.signals import post_save
-from .models import User
+from user.models import User
 from django.dispatch import receiver
 from .models import CompanyProfile
 
 @receiver(post_save, sender =  User)
 def create_company_profile(sender, instance, created, **kwargs):
-    if created:
+    if created and sender.status == "company":
         CompanyProfile.objects.create(user  = instance)
 
 

@@ -1,14 +1,20 @@
 from django import forms
-from django.contrib.auth.models import User
+from user.models import User
 from .models import CompanyProfile, Order
+from django.contrib.auth.forms import UserCreationForm
 
 
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
+class CompanyRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', "email"]
+        fields = [ "email", "password1", "password2"]
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["email"]
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -24,4 +30,4 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ('customer', 'order_date', 'employee', 'car',)
+        fields = ('start_date', 'employee', 'car',)
