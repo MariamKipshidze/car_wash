@@ -15,21 +15,6 @@ class Location(models.Model):
     class Meta:
         unique_together = ['city', 'street_address']
 
-     
-class Branch(models.Model):
-    company = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Company"))
-    title = models.CharField(max_length = 255, verbose_name=_('Branch'))
-    location = models.OneToOneField(Location, on_delete = models.PROTECT, verbose_name = _("Location"))
-    description = models.TextField(verbose_name=_("Description"))
-    image = models.ImageField(null = True, blank = True, upload_to = "pictures", verbose_name=_("Image"))
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = _('Branch')
-        verbose_name_plural = _('Branches')
-
 
 class EmployeeProfile(models.Model):
     employee = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Employee"))
@@ -65,6 +50,21 @@ class CompanyProfile(models.Model):
             output_size = (300,300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+class Branch(models.Model):
+    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"), related_name="company")
+    title = models.CharField(max_length = 255, verbose_name=_('Branch'))
+    location = models.OneToOneField(Location, on_delete = models.PROTECT, verbose_name = _("Location"))
+    description = models.TextField(verbose_name=_("Description"))
+    image = models.ImageField(null = True, blank = True, upload_to = "pictures", verbose_name=_("Image"))
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _('Branch')
+        verbose_name_plural = _('Branches')
 
 
 class CarType(models.Model):

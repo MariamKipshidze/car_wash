@@ -109,7 +109,8 @@ def company_register(request):
 
 @login_required
 def employee_register(request, pk):
-    company = get_object_or_404(CompanyProfile, id=pk)
+    branch = get_object_or_404(Branch, id=pk)
+    company = branch.company
     employee_register_form = EmployeeRegisterForm()
     employee_profile_register_form = EmployeeProfileRegisterForm(company)
 
