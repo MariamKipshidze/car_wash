@@ -119,7 +119,11 @@ def employee_register(request, pk):
         employee_profile_register_form = EmployeeProfileRegisterForm(request.POST)
         if employee_register_form.is_valid() and employee_profile_register_form.is_valid():
             employee_register_form.save()
+            form = employee_profile_register_form.save(commit=False)
+
+            form.branch = branch
             employee_profile_register_form.save()
+            
             messages.success(request, f"The employee was successfully registered")
             return redirect("profile")
 
