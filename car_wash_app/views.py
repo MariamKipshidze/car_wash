@@ -53,11 +53,11 @@ def employee_profile(request, pk):
 
     if request.method == "POST":
         orders = order_search_form.cleaned_data["order_search"]
-        if orders == Last_week:
+        if orders == 1:
             orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
-        elif orders == Last_Month:
+        elif orders == 2:
             orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=30)))
-        elif orders == Last_Year:
+        elif orders == 3:
             orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=365)))
         return HttpResponseRedirect(reverse("employee-detail", args=[str(pk)]))
 
