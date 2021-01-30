@@ -45,7 +45,7 @@ def detail(request, pk):
     })
 
 
-def employee_detail(request, pk):
+def employee_profile(request, pk):
     employee = get_object_or_404(EmployeeProfile, id=pk)
     orders  = employee.order.all().count()
     week_orders = employee.order.filter(order_date__gte = (timezone.now() - datetime.timedelta(weeks=1))).count()
