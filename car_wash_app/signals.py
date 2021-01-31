@@ -5,10 +5,10 @@ from .models import CompanyProfile
 
 @receiver(post_save, sender =  User)
 def create_company_profile(sender, instance, created, **kwargs):
-    if created and sender.status == "company":
-        CompanyProfile.objects.create(user  = instance)
+    if created and instance.status == 1:
+        CompanyProfile.objects.create(company = instance)
 
 
 @receiver(post_save, sender =  User)
 def save_company_profile(sender, instance,  **kwargs):
-    instance.companyprofile.save()
+    instance.company.save()
