@@ -1,10 +1,9 @@
 {% extends "car_wash_app/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-
   <div class="content-section">
     <div class="media">
-      <img class="rounded-circle account-img" src="{{user.companyprofile.image.url}}">
+      <img class="rounded-circle account-img" src="{{user.company.image.url}}">
       <div class="media-body">
         {% if user.company.name %}
           <h2 class="account-heading">{{ user.copany.name }}</h2>
@@ -24,11 +23,4 @@
       </div>
     </form>
   </div>
-  <div>
-    {% for branch in user.company.branch %}
-      <a class="nav-item nav-link" href="{% url 'employee-register' branch.id %}">Add employee in branch {{branch.title}}</a>
-      <p>{{branch.location}}</p>
-    {% endfor %}
-  </div>
-
 {% endblock content%}
