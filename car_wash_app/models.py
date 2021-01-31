@@ -56,7 +56,7 @@ class EmployeeProfile(models.Model):
     age = models.PositiveSmallIntegerField(_("Age"))
     mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"))
     manager = models.BooleanField(default = False, verbose_name = _("Manager"))
-    branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"), related_name="branch")
+    branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"), related_name="employee")
     salary = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Salary'), help_text='in Lari')
     order_percentage = models.IntegerField(verbose_name=_("Percentage of order price"))
 
@@ -88,6 +88,7 @@ class WashType(models.Model):
 
 
 class Coupon(models.Model):
+    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"), related_name="coupon")
     code = models.CharField(max_length=30, unique=True)
     expiration_date = models.DateTimeField(verbose_name=_('Coupon Expiration Date'), null=True, blank=True)
     discount = models.IntegerField(verbose_name=_('Discount'), help_text='%')

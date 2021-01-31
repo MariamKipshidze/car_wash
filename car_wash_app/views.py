@@ -23,7 +23,7 @@ def home(request):
 
 def detail(request, pk):
     branch = get_object_or_404(Branch, id=pk)
-    employees = branch.branch.all()
+    employees = branch.employee.all()
 
     return render(request, 'car_wash_app/branch_detail.html', context={
         'branch': branch,
