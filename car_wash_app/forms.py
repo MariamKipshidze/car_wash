@@ -6,7 +6,10 @@ from .choices import OrderFilterChoice
 
 
 class OrderSearchForm(forms.Form):
-    order_search = forms.ChoiceField(choices=OrderFilterChoice)
+    #order_search = forms.ChoiceField(choices=OrderFilterChoice)
+    order_search = forms.CharField()
+    class Meta:
+        fields = ["order_search"]
 
 
 class CompanyRegisterForm(UserCreationForm):

@@ -51,7 +51,7 @@ class Branch(models.Model):
 
 
 class EmployeeProfile(models.Model):
-    employee = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Employee"))
+    employee = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Employee"), related_name="employeeprofile")
     full_name = models.CharField(_("Full Name"), max_length = 255)
     age = models.PositiveSmallIntegerField(_("Age"))
     mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"))
@@ -144,7 +144,7 @@ class Order(models.Model):
 
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_("Created date"))
     start_date = models.DateTimeField(verbose_name=_('Scheduled time'))
-    end_date = models.DateTimeField(verbose_name=_('Scheduled time'))
+    end_date = models.DateTimeField(verbose_name=_('End time'))
 
     def __str__(self):
         return f'{self.car} using {self.wash_type}'
@@ -156,7 +156,7 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.price = self.car.car_type.price * self.wash_type.percentage / 100
+            self.price = self.car.car_type.washing_cost * self.wash_type.percentage / 100
         super(Order, self).save(*args, **kwargs)
 
 

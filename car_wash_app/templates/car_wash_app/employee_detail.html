@@ -1,12 +1,20 @@
 {% extends "car_wash_app/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-<article class="media content-section">
+<div class = "content-section">
+    <p>{{employee.full_name}}</p>
     <div>
-        {% for order in orders %}
-         <div>
-           <p> {{order.start_date }}</p>
-         </div>
-        {% endfor %}
+    <form method = "POST">
+      {% csrf_token %}
+      {{order_search_form|crispy}}
+      <div class = "form-group">
+          <button class = "btn btn-outline-info" type = "submit">Filter</button>
+      </div>
+    </form>
     </div>
-</article>
+    {% for order in orders %}
+      <p>{{order.car.licence_plate}}</p>
+    {% endfor %}
+</div>
+
 {% endblock content%}

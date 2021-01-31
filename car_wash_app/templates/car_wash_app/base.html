@@ -26,8 +26,11 @@
               </div>
               <!-- Navbar Right Side -->
               <div class="navbar-nav">
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and user.status == 1 %}
                   <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                  <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                {% elif user.is_authenticated and user.status == 2 %}
+                  <a class="nav-item nav-link" href="{% url 'employee-detail' user.employeeprofile.id %}">Profile</a>
                   <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                 {% else %}
                   <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
