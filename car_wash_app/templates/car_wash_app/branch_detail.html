@@ -24,9 +24,4 @@
       {% endfor %}
     </div>
 </article>
-<form action="" method="post">
-  {% csrf_token %}
-  {{ order_form|crispy}}
-  <input type="submit" value="Submit">
-</form>
 {% endblock content%}

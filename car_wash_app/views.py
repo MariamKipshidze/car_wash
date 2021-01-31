@@ -24,26 +24,10 @@ def home(request):
 def detail(request, pk):
     branch = get_object_or_404(Branch, id=pk)
     employees = branch.branch.all()
-    order_form = OrderForm(branch)
-
-    if request.method == "POST":
-        order_form = OrderForm(request.POST)
-        if order_form.is_valid():
-            order = order_form.save(commit=False)
-
-            order_date = order_form.cleaned_data["order_date"]
-            order.end_date = order_date + datetime.timedelta(minutes = 30)
-
-            order.branch = branch
-
-            order_form.save()
-            messages.success(request, f"Successfully booked!")
-            return HttpResponseRedirect(reverse("branch-detail", args=[str(pk)]))
 
     return render(request, 'car_wash_app/branch_detail.html', context={
         'branch': branch,
         'employees': employees,
-        'order_form': order_form
     })
 
 
