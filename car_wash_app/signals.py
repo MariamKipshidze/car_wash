@@ -8,7 +8,6 @@ def create_company_profile(sender, instance, created, **kwargs):
     if created and instance.status == 1:
         CompanyProfile.objects.create(company = instance)
 
-
-@receiver(post_save, sender =  User)
-def save_company_profile(sender, instance,  **kwargs):
-    instance.company.save()
+        # @receiver(post_save, sender =  User)
+        # def save_company_profile(sender, instance,  **kwargs):
+        instance.company.save()
