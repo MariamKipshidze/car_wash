@@ -2,7 +2,15 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class = "content-section">
-    <p>{{employee.full_name}}</p>
+  <h2>{{employee.full_name}}</h2>
+  <p>Mobile Number: {{employee.mobile_number}}</p>
+  {% if employee.manager %}
+    <p>Manager in {{employee.branch}}</p>
+  {% else %}
+    <p>Employee in {{employee.branch}}</p>
+  {% endif %}
+</div>
+<div class = "content-section">
     <div>
     <form method = "POST">
       {% csrf_token %}
@@ -13,7 +21,7 @@
     </form>
     </div>
     {% for order in orders %}
-      <p>{{order.car.licence_plate}}</p>
+      <p>{{order.car.licence_plate}} | {{order.start_date|date:"F d, Y"}} | {{order.price}}</p>
     {% endfor %}
 </div>
 
