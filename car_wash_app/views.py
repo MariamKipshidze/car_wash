@@ -38,14 +38,15 @@ def employee_profile(request, pk):
     order_search_form = OrderSearchForm()
 
     if request.method == "POST":
-        orders = order_search_form["order_search"]
-        if orders == 1:
-            orders = employee.orders.filter(order_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
-        elif orders == 2:
-            orders = employee.orders.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=30)))
-        elif orders == 3:
-            orders = employee.orders.filter(order_date__gte = (timezone.now() - datetime.timedelta(days=365)))
-        return HttpResponseRedirect(reverse("employee-detail", args=[str(pk)]))
+        order_search_form = OrderSearchForm(request.POST)
+        if order_search_form.is_valid():
+            data = order_search_form.cleaned_data["order_search"]
+            if data == "last week":
+                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
+            elif data == "last month":
+                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
+            elif data == "last year":
+                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
 
     return render(request, 'car_wash_app/employee_detail.html', context={
         'employee': employee,
