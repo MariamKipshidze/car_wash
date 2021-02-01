@@ -36,6 +36,7 @@ def employee_profile(request, pk):
     employee = get_object_or_404(EmployeeProfile, id=pk)
     orders  = employee.orders.all()
     order_search_form = OrderSearchForm()
+    earned_emount = 0
 
     if request.method == "POST":
         order_search_form = OrderSearchForm(request.POST)
@@ -48,10 +49,14 @@ def employee_profile(request, pk):
             elif data == "3":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
 
+    for order in orders:
+        earned_emount += order.price*employee.order_percentage/100
+
     return render(request, 'car_wash_app/employee_detail.html', context={
         'employee': employee,
         'orders': orders,
         'order_search_form':order_search_form,
+        'earned_emount': earned_emount,
     })
 
 
