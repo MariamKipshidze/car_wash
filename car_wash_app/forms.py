@@ -22,10 +22,6 @@ class EmployeeRegisterForm(UserCreationForm):
 
 
 class EmployeeProfileRegisterForm(forms.ModelForm):
-    def __init__(self, current_company, *args, **kwargs):
-        super(EmployeeProfileRegisterForm, self).__init__(*args, **kwargs)
-        self.fields['branch'].queryset = self.fields['branch'].queryset.filter(company = current_company)
-
     class Meta:
         model = EmployeeProfile
         fields = ["employee", "full_name", "age", "mobile_number", "manager", "salary","order_percentage",]

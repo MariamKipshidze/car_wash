@@ -23,4 +23,9 @@
       </div>
     </form>
   </div>
+  <div class="content-section">
+    {% for branch in branches %}
+     <a class="nav-item nav-link" href="{% url 'employee-register' branch.id %}"> Add amployee to the {{branch.title}}</a>
+    {% endfor %}
+  </div>
 {% endblock content%}

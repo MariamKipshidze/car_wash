@@ -61,7 +61,9 @@ def employee_profile(request, pk):
 
 
 @login_required
-def profile(request):
+def profile(request, pk):
+    company = get_object_or_404(CompanyProfile, id = pk)
+    branches = company.branch.all()
     user_update_form = UserUpdateForm(instance=request.user)
     profile_update_form = ProfileUpdateForm(instance=request.user.company)
 
@@ -78,7 +80,8 @@ def profile(request):
 
     context = {
         "user_update_form": user_update_form,
-        "profile_update_form": profile_update_form
+        "profile_update_form": profile_update_form,
+        "branches": branches,
     }
     
 
@@ -102,21 +105,24 @@ def company_register(request):
 @login_required
 def employee_register(request, pk):
     branch = get_object_or_404(Branch, id=pk)
-    company = branch.company
     employee_register_form = EmployeeRegisterForm()
-    employee_profile_register_form = EmployeeProfileRegisterForm(company)
+    employee_profile_register_form = EmployeeProfileRegisterForm()
 
     if request.method == "POST":
         employee_register_form = EmployeeRegisterForm(request.POST)
         employee_profile_register_form = EmployeeProfileRegisterForm(request.POST)
-        if employee_register_form.is_valid() and employee_profile_register_form.is_valid():
+        if employee_register_form.is_valid(): 
             employee_register_form.save()
+
+            messages.success(request, f"The employee user was successfully registered")
+            return HttpResponseRedirect(reverse("employee-register", args=[str(pk)]))
+        elif employee_profile_register_form.is_valid():
             form = employee_profile_register_form.save(commit=False)
 
             form.branch = branch
             employee_profile_register_form.save()
             
-            messages.success(request, f"The employee was successfully registered")
+            messages.success(request, f"The employee profile was successfully created")
             return HttpResponseRedirect(reverse("employee-register", args=[str(pk)]))
 
     return render(request, "car_wash_app/employee_register.html",context={
