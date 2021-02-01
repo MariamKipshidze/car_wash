@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from user.models import User
 
 
 def home(request):
@@ -111,15 +112,13 @@ def employee_register(request, pk):
     if request.method == "POST":
         employee_register_form = EmployeeRegisterForm(request.POST)
         employee_profile_register_form = EmployeeProfileRegisterForm(request.POST)
-        if employee_register_form.is_valid(): 
+        if employee_register_form.is_valid() and employee_profile_register_form.is_valid():
             employee_register_form.save()
-
-            messages.success(request, f"The employee user was successfully registered")
-            return HttpResponseRedirect(reverse("employee-register", args=[str(pk)]))
-        elif employee_profile_register_form.is_valid():
+            user = get_object_or_404(User, email = employee_register_form.cleaned_data["email"])
             form = employee_profile_register_form.save(commit=False)
 
             form.branch = branch
+            form.employee = user
             employee_profile_register_form.save()
             
             messages.success(request, f"The employee profile was successfully created")
