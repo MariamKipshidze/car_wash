@@ -41,11 +41,11 @@ def employee_profile(request, pk):
         order_search_form = OrderSearchForm(request.POST)
         if order_search_form.is_valid():
             data = order_search_form.cleaned_data["order_search"]
-            if data == "last week":
+            if data == "1":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
-            elif data == "last month":
+            elif data == "2":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
-            elif data == "last year":
+            elif data == "3":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
 
     return render(request, 'car_wash_app/employee_detail.html', context={

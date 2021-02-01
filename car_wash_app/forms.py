@@ -2,12 +2,11 @@ from django import forms
 from user.models import User
 from .models import CompanyProfile, Order, EmployeeProfile
 from django.contrib.auth.forms import UserCreationForm
-from .choices import OrderFilterChoice
 
 
 class OrderSearchForm(forms.Form):
-    #order_search = forms.ChoiceField(choices=OrderFilterChoice)
-    order_search = forms.CharField()
+    CHOICE = (("1", "last week"), ("2", "last month"), ("3", "last year") )
+    order_search = forms.ChoiceField(choices=CHOICE)
 
 
 class CompanyRegisterForm(UserCreationForm):
