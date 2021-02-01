@@ -80,7 +80,7 @@ class CarType(models.Model):
 
 class WashType(models.Model):
     company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"))
-    name = models.CharField(max_length=45, verbose_name=_('Car Type'), unique=True)
+    name = models.CharField(max_length=45, verbose_name=_('Wash Type'), unique=True)
     percentage = models.IntegerField(verbose_name=_("Percentage of base price"), default=100)
 
     def __str__(self):
