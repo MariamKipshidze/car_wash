@@ -14,7 +14,8 @@
         {% endif %} -->
       </div>
       <h2 class="article-title" >{{ branch.title }}</h2>
-      <p class="article-content">{{ branch.location }}</p>
+      <p class="article-content">Location: {{ branch.location }}</p>
+      <p class="article-content">Mobile Number: {{ branch.company.mobile_number}}</p>
       <p class="article-content">{{ branch.description }}</p>
       {% if branch.image %}
           <img class = "article-img" src = "{{ branch.image.url }}">
