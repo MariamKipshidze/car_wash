@@ -38,7 +38,7 @@ def detail(request, pk):
 def employee_profile(request, pk):
     employee = get_object_or_404(EmployeeProfile, id=pk)
     order_search_form = OrderSearchForm()
-    orders  = employee.orders.all()
+    orders  = employee.orders.all().order_by("-start_date")
 
     earned_money_q = ExpressionWrapper(
         F('price') * F('employee__order_percentage') / Decimal('100.0'),
@@ -50,7 +50,7 @@ def employee_profile(request, pk):
         if order_search_form.is_valid():
             data = order_search_form.cleaned_data["order_search"]
             if data == "1":
-                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
+                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1))).order_by("-start_date")
                 employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
                     .annotate(earned_per_order=earned_money_q) \
                     .aggregate(
@@ -63,7 +63,7 @@ def employee_profile(request, pk):
                         filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
                     ))
             elif data == "2":
-                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
+                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=30))).order_by("-start_date")
                 employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
                     .annotate(earned_per_order=earned_money_q) \
                     .aggregate(
@@ -76,7 +76,7 @@ def employee_profile(request, pk):
                         filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
                     ))
             elif data == "3":
-                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
+                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=365))).order_by("-start_date")
                 employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
                     .annotate(earned_per_order=earned_money_q) \
                     .aggregate(
