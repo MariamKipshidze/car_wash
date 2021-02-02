@@ -1,4 +1,6 @@
 import datetime 
+from decimal import Decimal
+from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count, Q
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -35,9 +37,13 @@ def detail(request, pk):
 @login_required
 def employee_profile(request, pk):
     employee = get_object_or_404(EmployeeProfile, id=pk)
-    orders  = employee.orders.all()
     order_search_form = OrderSearchForm()
-    earned_emount = 0
+    orders  = employee.orders.all()
+
+    earned_money_q = ExpressionWrapper(
+        F('price') * F('employee__order_percentage') / Decimal('100.0'),
+        output_field=DecimalField())
+    employee_info = employee.orders.annotate().aggregate()
 
     if request.method == "POST":
         order_search_form = OrderSearchForm(request.POST)
@@ -45,20 +51,52 @@ def employee_profile(request, pk):
             data = order_search_form.cleaned_data["order_search"]
             if data == "1":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
+                employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
+                    .annotate(earned_per_order=earned_money_q) \
+                    .aggregate(
+                    earned_money = Sum(
+                        'earned_per_order',
+                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
+                    ),
+                    washed_amount=Count(
+                        'id',
+                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1)))
+                    ))
             elif data == "2":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
+                employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
+                    .annotate(earned_per_order=earned_money_q) \
+                    .aggregate(
+                    earned_money=Sum(
+                        'earned_per_order',
+                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
+                    ),
+                    washed_amount=Count(
+                        'id',
+                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
+                    ))
             elif data == "3":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
-
-    for order in orders:
-        earned_emount += order.price*employee.order_percentage/100
-
+                employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
+                    .annotate(earned_per_order=earned_money_q) \
+                    .aggregate(
+                    earned_money=Sum(
+                        'earned_per_order',
+                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
+                    ),
+                    washed_amount=Count(
+                        'id',
+                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
+                    ))
+    
     return render(request, 'car_wash_app/employee_detail.html', context={
-        'employee': employee,
-        'orders': orders,
-        'order_search_form':order_search_form,
-        'earned_emount': earned_emount,
+        "employee": employee,
+        "order_search_form":order_search_form,
+        "orders":orders,
+        **employee_info
     })
+
+    
 
 
 @login_required

@@ -3,11 +3,12 @@
 {% block content %}
 <div class = "content-section">
   <h2>{{employee.full_name}}</h2>
-  <p>Mobile Number: {{employee.mobile_number}}</p>
+  <p><strong> Number:</strong> {{employee.mobile_number}}</p>
+  <p><strong>Fixed salary:</strong> {{employee.salary}}</p>
   {% if employee.manager %}
-    <p>Manager in {{employee.branch}}</p>
+    <p><strong>Manager in</strong> {{employee.branch}}</p>
   {% else %}
-    <p>Employee in {{employee.branch}}</p>
+    <p><strong>Employee in {{employee.branch}}</strong></p>
   {% endif %}
 </div>
 <div class = "content-section">
@@ -17,7 +18,10 @@
       {{order_search_form|crispy}}
       <div class = "form-group">
           <button class = "btn btn-outline-info" type = "submit">Filter</button>
-          <h5> Earned money from orders: {{earned_emount}}</h5>
+          {% if earned_money and washed_amount %}
+            <p><strong>Earned money from orders:</strong>  {{earned_money}} </p>
+            <p><strong>Washed amount: </strong>  {{washed_amount}} </p>
+          {% endif %}
       </div>
     </form>
     </div>
