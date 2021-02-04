@@ -43,7 +43,7 @@ def employee_profile(request, pk):
     earned_money_q = ExpressionWrapper(
         F('price') * F('employee__order_percentage') / Decimal('100.0'),
         output_field=DecimalField())
-    employee_info = employee.orders.annotate().aggregate()
+    employee_info = {}
 
     if request.method == "POST":
         order_search_form = OrderSearchForm(request.POST)
@@ -152,7 +152,6 @@ def employee_register(request, pk):
         employee_profile_register_form = EmployeeProfileRegisterForm(request.POST)
         if employee_register_form.is_valid() and employee_profile_register_form.is_valid():
             employee = employee_register_form.save()
-            #user = get_object_or_404(User, email = employee_register_form.cleaned_data["email"])
             employee_profile = employee_profile_register_form.save(commit=False)
 
             employee_profile.branch = branch
