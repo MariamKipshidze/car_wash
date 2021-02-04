@@ -151,12 +151,12 @@ def employee_register(request, pk):
         employee_register_form = EmployeeRegisterForm(request.POST)
         employee_profile_register_form = EmployeeProfileRegisterForm(request.POST)
         if employee_register_form.is_valid() and employee_profile_register_form.is_valid():
-            employee_register_form.save()
-            user = get_object_or_404(User, email = employee_register_form.cleaned_data["email"])
-            form = employee_profile_register_form.save(commit=False)
+            employee = employee_register_form.save()
+            #user = get_object_or_404(User, email = employee_register_form.cleaned_data["email"])
+            employee_profile = employee_profile_register_form.save(commit=False)
 
-            form.branch = branch
-            form.employee = user
+            employee_profile.branch = branch
+            employee_profile.employee = employee
             employee_profile_register_form.save()
             
             messages.success(request, f"The employee profile was successfully created")
