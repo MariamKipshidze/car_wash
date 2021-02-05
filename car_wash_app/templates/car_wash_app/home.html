@@ -4,8 +4,8 @@
 
   <form method="GET" action=".">
       Branch search by title
-      <div class="input-field inline">
-          <input id="search_branch" type="text" name="q" value="{{ request.GET.q }}">
+      <div class = "form-group">
+          <input class = "textinput textInput form-control" id="search_branch" type="text" name="q" value="{{ request.GET.q }}">
           <button class = "btn btn-outline-info" >Search</button>
       </div>
   </form>

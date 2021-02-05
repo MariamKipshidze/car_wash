@@ -50,8 +50,8 @@ def employee_profile(request, pk):
         output_field=DecimalField())
     employee_info = {}
 
-    if request.method == "POST":
-        order_search_form = OrderSearchForm(request.POST)
+    if request.method == "GET":
+        order_search_form = OrderSearchForm(request.GET)
         if order_search_form.is_valid():
             data = order_search_form.cleaned_data["order_search"]
             if data == "1":

@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 class OrderSearchForm(forms.Form):
     CHOICE = (("1", "last week"), ("2", "last month"), ("3", "last year") )
-    order_search = forms.ChoiceField(choices=CHOICE)
+    order_search = forms.ChoiceField(choices=CHOICE, required=False)
 
 
 class CompanyRegisterForm(UserCreationForm):
