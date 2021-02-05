@@ -19,8 +19,12 @@ from user.models import User
 
 def home(request):
     branches = Branch.objects.all()
+    q = request.GET.get('q')
+
+    if q:
+        branches  = Branch.objects.filter(title__icontains = q)
     return render(request, "car_wash_app/home.html", context = {
-        "branches":branches
+        "branches":branches,
     })
 
 

@@ -2,6 +2,13 @@
 
 {% block content %}
 
+  <form method="GET" action=".">
+      Branch search by title
+      <div class="input-field inline">
+          <input id="search_branch" type="text" name="q" value="{{ request.GET.q }}">
+          <button class = "btn btn-outline-info" >Search</button>
+      </div>
+  </form>
   {% for branch in branches %}
   <article class="media content-section">
       <img class = "rounded-circle article-img" src = "{{ branch.company.image.url }}">
