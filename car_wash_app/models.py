@@ -4,6 +4,7 @@ from django.db.models.constraints import UniqueConstraint
 from django.db.models.query_utils import Q
 from user.models import User
 from PIL import Image
+from django.urls import reverse
 
 class Location(models.Model):
     city = models.CharField(max_length = 255, verbose_name = _("City"))
@@ -45,9 +46,13 @@ class Branch(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("profile", kwargs={"pk": self.company.pk})
+
     class Meta:
         verbose_name = _('Branch')
         verbose_name_plural = _('Branches')
+
 
 
 class EmployeeProfile(models.Model):
