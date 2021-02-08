@@ -1,21 +1,19 @@
 import datetime 
 from decimal import Decimal
 from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count, Q
-from django.shortcuts import render, redirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Branch, EmployeeProfile, Order
-from .models import CompanyProfile
-from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm
-from .forms import CompanyRegisterForm, OrderSearchForm
+from .models import Branch, EmployeeProfile, Order, CompanyProfile
+from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm, CompanyRegisterForm, OrderSearchForm
 from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm
 from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from user.models import User
-
+from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def home(request):
@@ -85,8 +83,6 @@ def employee_profile(request, pk):
         "orders":orders,
         **employee_info
     })
-
-    
 
 
 @login_required
@@ -158,3 +154,10 @@ def employee_register(request, pk):
         })
 
 
+class BranchCreateView(LoginRequiredMixin, CreateView):
+    model = Branch
+    fields = ["title", "location", "description", "image" ]
+
+    def form_valid(self, form):
+        form.instance.company = self.request.user
+        return super().form_valid(form)
