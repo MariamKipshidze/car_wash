@@ -48,6 +48,21 @@ def employee_profile(request, pk):
     earned_money_q = ExpressionWrapper(
         F('price') * F('employee__order_percentage') / Decimal('100.0'),
         output_field=DecimalField())
+
+    def employeeinfo(x):
+        employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
+            .annotate(earned_per_order=earned_money_q) \
+            .aggregate(
+            earned_money=Sum(
+                'earned_per_order',
+                filter=Q(start_date__gte = (timezone.now() - x))
+            ),
+            washed_amount=Count(
+                'id',
+                filter=Q(start_date__gte = (timezone.now() - x))
+            ))
+        return employee_info
+
     employee_info = {}
 
     if request.method == "GET":
@@ -56,43 +71,13 @@ def employee_profile(request, pk):
             data = order_search_form.cleaned_data["order_search"]
             if data == "1":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1))).order_by("-start_date")
-                employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
-                    .annotate(earned_per_order=earned_money_q) \
-                    .aggregate(
-                    earned_money=Sum(
-                        'earned_per_order',
-                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=7)))
-                    ),
-                    washed_amount=Count(
-                        'id',
-                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=7)))
-                    ))
+                employee_info  = employeeinfo(datetime.timedelta(days=7))
             elif data == "2":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=30))).order_by("-start_date")
-                employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
-                    .annotate(earned_per_order=earned_money_q) \
-                    .aggregate(
-                    earned_money=Sum(
-                        'earned_per_order',
-                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
-                    ),
-                    washed_amount=Count(
-                        'id',
-                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=30)))
-                    ))
+                employee_info  = employeeinfo(datetime.timedelta(days=30))
             elif data == "3":
                 orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=365))).order_by("-start_date")
-                employee_info = employee.orders.filter(end_date__lte = timezone.now()) \
-                    .annotate(earned_per_order=earned_money_q) \
-                    .aggregate(
-                    earned_money=Sum(
-                        'earned_per_order',
-                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
-                    ),
-                    washed_amount=Count(
-                        'id',
-                        filter=Q(start_date__gte = (timezone.now() - datetime.timedelta(days=365)))
-                    ))
+                employee_info  = employeeinfo(datetime.timedelta(days=365))
     
     return render(request, 'car_wash_app/employee_detail.html', context={
         "employee": employee,
