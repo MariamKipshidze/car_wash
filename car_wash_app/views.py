@@ -19,14 +19,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def home(request):
     branches = Branch.objects.all()
-
     q = request.GET.get('q')
 
     if q:
         branches  = Branch.objects.filter(title__icontains = q)
 
     page = request.GET.get('page', 1)
-
     paginator = Paginator(branches, 5)
     try:
         branches = paginator.page(page)
