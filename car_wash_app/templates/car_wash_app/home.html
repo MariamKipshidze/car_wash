@@ -24,4 +24,26 @@
       </div>
     </article>
   {% endfor %}
+
+  {% if branches.has_other_pages %}
+    <ul class="pagination">
+      {% if branches.has_previous %}
+        <li><a href="?page={{ branches.previous_page_number }}">&laquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&laquo;</span></li>
+      {% endif %}
+      {% for i in branches.paginator.page_range %}
+        {% if branches.number == i %}
+          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+          <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if branches.has_next %}
+        <li><a href="?page={{ branches.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+      {% endif %}
+    </ul>
+  {% endif %}
 {% endblock content%}

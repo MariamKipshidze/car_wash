@@ -14,14 +14,27 @@ from django.urls import reverse
 from user.models import User
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
     branches = Branch.objects.all()
+
     q = request.GET.get('q')
 
     if q:
         branches  = Branch.objects.filter(title__icontains = q)
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(branches, 5)
+    try:
+        branches = paginator.page(page)
+    except PageNotAnInteger:
+        branches = paginator.page(1)
+    except EmptyPage:
+        branches = paginator.page(paginator.num_pages)
+
     return render(request, "car_wash_app/home.html", context = {
         "branches":branches,
     })
