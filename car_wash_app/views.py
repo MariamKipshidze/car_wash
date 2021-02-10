@@ -6,13 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Branch, EmployeeProfile, Order, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm, CompanyRegisterForm, OrderSearchForm
-from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm
+from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm
 from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from user.models import User
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -164,6 +164,24 @@ def employee_register(request, pk):
         "branch":branch,
         })
 
+@login_required
+def order_create(request):
+    company = get_object_or_404(CompanyProfile, id = request.user.company.pk)
+    order_form = OrderForm(company)
+
+    if request.method == "POST":
+        order_form = OrderForm(company, request.POST)
+        if order_form.is_valid():
+            order_form.save()
+            
+            messages.success(request, f"Successfully booked")
+            return HttpResponseRedirect(reverse("order-create"))
+
+    return render(request, "car_wash_app/order_form.html",context={
+        "order_form": order_form,
+        })
+
+
 
 class BranchCreateView(LoginRequiredMixin, CreateView):
     model = Branch
@@ -172,3 +190,4 @@ class BranchCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.company = self.request.user.company
         return super().form_valid(form)
+
