@@ -153,7 +153,7 @@ def employee_register(request, pk):
 
             employee_profile.branch = branch
             employee_profile.employee = employee
-            employee_profile_register_form.save()
+            employee_profile.save()
             
             messages.success(request, f"The employee profile was successfully created")
             return HttpResponseRedirect(reverse("employee-register", args=[str(pk)]))
@@ -172,8 +172,10 @@ def order_create(request):
     if request.method == "POST":
         order_form = OrderForm(company, request.POST)
         if order_form.is_valid():
-            order_form.save()
-            
+            order = order_form.save(commit=False)
+            order.start_date = order_form.cleaned_data["start_date_day"] + " " + order_form.cleaned_data["start_date_time"]
+            order.save()
+
             messages.success(request, f"Successfully booked")
             return HttpResponseRedirect(reverse("order-create"))
 
