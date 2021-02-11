@@ -4,20 +4,23 @@ from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count, Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views.generic import CreateView, FormView, View
+
 from .models import Branch, EmployeeProfile, Order, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm, CompanyRegisterForm, OrderSearchForm
 from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm
+from user.models import User
+
 from django.utils import timezone
 from django.db.models import Count
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.handlers.wsgi import WSGIRequest
 from django.urls import reverse
-from user.models import User
-from django.views.generic import CreateView, FormView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-def home(request):
+def home(request: WSGIRequest) -> HttpResponse:
     branches = Branch.objects.all()
     q = request.GET.get('q')
 
@@ -38,7 +41,7 @@ def home(request):
     })
 
 
-def detail(request, pk):
+def detail(request: WSGIRequest, pk: int) -> HttpResponse:
     branch = get_object_or_404(Branch, id=pk)
     employees = branch.employee.all()
 
@@ -49,7 +52,7 @@ def detail(request, pk):
 
 
 @login_required
-def employee_profile(request, pk):
+def employee_profile(request: WSGIRequest, pk: int) -> HttpResponse:
     employee = get_object_or_404(EmployeeProfile, id=pk)
     order_search_form = OrderSearchForm()
     orders  = employee.orders.order_by("-start_date")
@@ -79,13 +82,16 @@ def employee_profile(request, pk):
         if order_search_form.is_valid():
             data = order_search_form.cleaned_data["order_search"]
             if data == "1":
-                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(weeks=1))).order_by("-start_date")
+                orders = employee.orders.filter(start_date__gte = (timezone.now() \
+                - datetime.timedelta(weeks=1))).order_by("-start_date")
                 employee_info  = employeeinfo(datetime.timedelta(days=7))
             elif data == "2":
-                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=30))).order_by("-start_date")
+                orders = employee.orders.filter(start_date__gte = (timezone.now() \
+                 - datetime.timedelta(days=30))).order_by("-start_date")
                 employee_info  = employeeinfo(datetime.timedelta(days=30))
             elif data == "3":
-                orders = employee.orders.filter(start_date__gte = (timezone.now() - datetime.timedelta(days=365))).order_by("-start_date")
+                orders = employee.orders.filter(start_date__gte = (timezone.now() \
+                 - datetime.timedelta(days=365))).order_by("-start_date")
                 employee_info  = employeeinfo(datetime.timedelta(days=365))
     
     return render(request, 'car_wash_app/employee_detail.html', context={
@@ -97,7 +103,7 @@ def employee_profile(request, pk):
 
 
 @login_required
-def profile(request, pk):
+def profile(request: WSGIRequest, pk: int) -> HttpResponse:
     company = get_object_or_404(CompanyProfile, id = pk)
     branches = company.branch.all()
     user_update_form = UserUpdateForm(instance=request.user)
@@ -105,7 +111,8 @@ def profile(request, pk):
 
     if request.method == "POST":
         user_update_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_update_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.company)
+        profile_update_form = ProfileUpdateForm(request.POST, request.FILES, \
+             instance=request.user.company)
 
         if user_update_form.is_valid() and profile_update_form.is_valid():
             user_update_form.save()
@@ -124,7 +131,7 @@ def profile(request, pk):
     return render(request, "car_wash_app/profile.html", context)
 
 
-def company_register(request):
+def company_register(request: WSGIRequest) -> HttpResponse:
     company_register_form = CompanyRegisterForm()
     if request.method == "POST":
         company_register_form = CompanyRegisterForm(request.POST)
@@ -139,7 +146,7 @@ def company_register(request):
 
 
 @login_required
-def employee_register(request, pk):
+def employee_register(request: WSGIRequest, pk: int) -> HttpResponse:
     branch = get_object_or_404(Branch, id=pk)
     employee_register_form = EmployeeRegisterForm()
     employee_profile_register_form = EmployeeProfileRegisterForm()
@@ -165,7 +172,7 @@ def employee_register(request, pk):
         })
 
 @login_required
-def order_create(request):
+def order_create(request: WSGIRequest) -> HttpResponse:
     company = get_object_or_404(CompanyProfile, id = request.user.company.pk)
     order_form = OrderForm(company)
 
@@ -173,7 +180,8 @@ def order_create(request):
         order_form = OrderForm(company, request.POST)
         if order_form.is_valid():
             order = order_form.save(commit=False)
-            order.start_date = order_form.cleaned_data["start_date_day"] + " " + order_form.cleaned_data["start_date_time"]
+            order.start_date = order_form.cleaned_data["start_date_day"] + \
+            " " + order_form.cleaned_data["start_date_time"]
             order.save()
 
             messages.success(request, f"Successfully booked")
