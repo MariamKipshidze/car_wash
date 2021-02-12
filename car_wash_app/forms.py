@@ -33,7 +33,9 @@ class OrderForm(forms.ModelForm):
 
 
 class CarCreateForm(forms.ModelForm):
-    licence_plate = CharField(validators=[RegexValidator(r'^[a-zA-Z]{2}[0-9]{3}[a-zA-z]{2}$|^[a-zA-Z]{3}[0-9]{3}$', message='ფორმატი უნდა იყოს: llnnnll')])
+    licence_plate = CharField(
+        validators=[RegexValidator(r'^[a-zA-Z]{2}[0-9]{3}[a-zA-z]{2}|[a-zA-Z]{3}[0-9]{3}$', 
+        message='ფორმატი უნდა იყოს: llnnnll ან lllnnn')])
 
     class Meta:
         model = Car
