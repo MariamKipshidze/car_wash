@@ -18,10 +18,20 @@ class Location(models.Model):
 
 
 class CompanyProfile(models.Model):
-    company = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Company"), related_name="company")
+    company = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE, 
+        verbose_name=_("Company"), 
+        related_name="company",
+    )
     name  = models.CharField(max_length=100, verbose_name=_("Company Name"),null = True, blank = True)
     image = models.ImageField(default="default_logo.jpg", upload_to="logo_pics", verbose_name=_("Image"))
-    mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"),null = True, blank = True)
+    mobile_number = models.CharField(
+        max_length=20, 
+        verbose_name=_("Mobile Number"),
+        null = True, 
+        blank = True,
+    )
 
     def __str__(self):
         return f'{self.name}'
@@ -37,7 +47,12 @@ class CompanyProfile(models.Model):
 
 
 class Branch(models.Model):
-    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"), related_name="branch")
+    company = models.ForeignKey(
+        CompanyProfile, 
+        on_delete=models.CASCADE, 
+        verbose_name=_("Company"), 
+        related_name="branch",
+    )
     title = models.CharField(max_length = 255, verbose_name=_('Branch'))
     location = models.OneToOneField(Location, on_delete = models.PROTECT, verbose_name = _("Location"))
     description = models.TextField(verbose_name=_("Description"))
@@ -54,20 +69,38 @@ class Branch(models.Model):
         verbose_name_plural = _('Branches')
 
 
-
 class EmployeeProfile(models.Model):
-    employee = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Employee"), related_name="employeeprofile")
+    employee = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE, 
+        verbose_name=_("Employee"), 
+        related_name="employeeprofile",
+    )
     full_name = models.CharField(_("Full Name"), max_length = 255)
     age = models.PositiveSmallIntegerField(_("Age"))
     mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"))
     manager = models.BooleanField(default = False, verbose_name = _("Manager"))
-    branch = models.ForeignKey(Branch, on_delete = models.CASCADE, verbose_name = _("Branch"), related_name="employee")
-    salary = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Salary'), help_text='in Lari')
+    branch = models.ForeignKey(
+        Branch, 
+        on_delete = models.CASCADE, 
+        verbose_name = _("Branch"), 
+        related_name="employee",
+    )
+    salary = models.DecimalField(
+        max_digits=8, 
+        decimal_places=2, 
+        verbose_name=_('Salary'), 
+        help_text='in Lari',
+    )
     order_percentage = models.IntegerField(verbose_name=_("Percentage of order price"))
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['branch'], condition=Q(manager=True), name = "unique_together_manager_branch")
+            UniqueConstraint(
+                fields=['branch'], 
+                condition=Q(manager=True),
+                name = "unique_together_manager_branch",
+            )
         ]
         
     def __str__(self):
@@ -93,7 +126,12 @@ class WashType(models.Model):
 
 
 class Coupon(models.Model):
-    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"), related_name="coupon")
+    company = models.ForeignKey(
+        CompanyProfile, 
+        on_delete=models.CASCADE,
+         verbose_name=_("Company"),
+          related_name="coupon",
+    )
     code = models.CharField(max_length=30, unique=True)
     expiration_date = models.DateTimeField(verbose_name=_('Coupon Expiration Date'), null=True, blank=True)
     discount = models.IntegerField(verbose_name=_('Discount'), help_text='%')
@@ -164,6 +202,4 @@ class Order(models.Model):
         if not self.pk:
             self.price = self.car.car_type.washing_cost * self.wash_type.percentage / 100
         super(Order, self).save(*args, **kwargs)
-
-
 
