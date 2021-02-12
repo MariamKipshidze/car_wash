@@ -4,7 +4,7 @@ from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Count, Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.generic import CreateView, FormView, View
+from django.views.generic import CreateView, FormView, DeleteView
 
 from .models import Branch, EmployeeProfile, Order, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, OrderForm, CompanyRegisterForm, OrderSearchForm
@@ -16,7 +16,7 @@ from django.db.models import Count
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.handlers.wsgi import WSGIRequest
 from django.urls import reverse
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -201,3 +201,13 @@ class BranchCreateView(LoginRequiredMixin, CreateView):
         form.instance.company = self.request.user.company
         return super().form_valid(form)
 
+
+class BranchDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Branch
+    success_url = "/"
+
+    def test_func(self):
+        branch = self.get_object()
+        if self.request.user.company == branch.company:
+            return True
+        return False

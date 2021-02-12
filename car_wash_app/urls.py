@@ -2,7 +2,7 @@ from django.urls import path
 from . import views as user_views
 from django.contrib.auth import views as auth_views 
 from .views import home, detail, profile, BranchCreateView, order_create
-from .views import employee_profile, employee_register, company_register
+from .views import employee_profile, employee_register, company_register, BranchDeleteView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -18,6 +18,7 @@ urlpatterns = [
     path('company/register/', user_views.company_register, name = "company-register"),
     path("branch/new/", BranchCreateView.as_view(), name="branch-create"),
     path("order/new/", user_views.order_create, name="order-create"),
+    path("branch/<int:pk>/delete/", BranchDeleteView.as_view(), name="branch-delete"),
 ]
 
 if settings.DEBUG:
