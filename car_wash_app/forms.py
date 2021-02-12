@@ -4,6 +4,7 @@ from .models import CompanyProfile, Order, EmployeeProfile, Car, WashType
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MaxLengthValidator, MinLengthValidator, RegexValidator
 from django.forms import EmailField, CharField, Textarea, ModelChoiceField, TextInput
+from .validators import validate_licence_plate
 
 
 class OrderForm(forms.ModelForm):
@@ -35,9 +36,11 @@ class OrderForm(forms.ModelForm):
 
 
 class CarCreateForm(forms.ModelForm):
+    licence_plate = CharField(validators=[validate_licence_plate])
+
     class Meta:
         model = Car
-        fields = [ "car_type", "licence_plate"]
+        fields = ["car_type", "licence_plate"]
 
 
 class OrderSearchForm(forms.Form):
