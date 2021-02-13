@@ -1,6 +1,7 @@
 from django import forms
 from user.models import User
-from .models import CompanyProfile, Order, EmployeeProfile, Car, WashType, CarType, WashType, Coupon
+from .models import CompanyProfile, Order, EmployeeProfile, Car, WashType
+from .models import Location, Coupon, WashType, CarType, Branch
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MaxLengthValidator, RegexValidator
 from django.forms import CharField, Textarea, ModelChoiceField, TextInput
@@ -39,6 +40,18 @@ class WashTypeForm(forms.ModelForm):
     class Meta:
         model = WashType
         fields = ["name", "percentage"]
+
+
+class LocationForm(forms.ModelForm):
+    class Meta:
+        model = Location
+        fields = ["city", "street_address"]
+
+
+class BranchForm(forms.ModelForm):
+    class Meta:
+        model = Branch
+        fields = ["title", "description", "image"]
 
 
 class CouponForm(forms.ModelForm):

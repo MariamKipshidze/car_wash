@@ -9,7 +9,7 @@ from django.views.generic import CreateView, DeleteView
 from .models import Branch, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, CompanyRegisterForm, OrderSearchForm
 from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm, CarCreateForm
-from .forms import CarTypeForm, WashTypeForm
+from .forms import CarTypeForm, WashTypeForm, LocationForm, BranchForm
 
 from django.utils import timezone
 from django.db.models import Count
@@ -247,13 +247,28 @@ def wash_type_create(request: WSGIRequest) -> HttpResponse:
         })
 
 
-class BranchCreateView(LoginRequiredMixin, CreateView):
-    model = Branch
-    fields = ["title", "location", "description", "image"]
+@login_required
+def branch_create(request: WSGIRequest) -> HttpResponse:
+    branch_form = BranchForm()
+    location_form = LocationForm()
 
-    def form_valid(self, form):
-        form.instance.company = self.request.user.company
-        return super().form_valid(form)
+    if request.method == "POST":
+        branch_form = BranchForm(request.POST)
+        location_form = LocationForm(request.POST)
+        if location_form.is_valid() and location_form.is_valid():
+            location = location_form.save()
+            branch = branch_form.save(commit=False)
+            branch.location = location 
+            branch.company = request.user.company
+            branch.save()
+
+            messages.success(request, f"Successfully created")
+            return HttpResponseRedirect(reverse("home"))
+
+    return render(request, "car_wash_app/branch_form.html", context={
+        "branch_form": branch_form,
+        "location_form": location_form,
+        })
 
 
 class BranchDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
