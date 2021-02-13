@@ -2,17 +2,21 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div class = "content-section">
-    <form method = "POST">
-        {% csrf_token %}
-        <fieldset class = "form-group">
-            <legend class = "border-bottom mb-4">Create coupon</legend>
-            {{form|crispy}}
-        </fieldset>
-        <div class = "form-group">
-            <button class = "btn btn-outline-info" type = "submit">Create</button>
+    {% if user.status == 1 %}
+        <div class = "content-section">
+            <form method = "POST">
+                {% csrf_token %}
+                <fieldset class = "form-group">
+                    <legend class = "border-bottom mb-4">Create coupon</legend>
+                    {{form|crispy}}
+                </fieldset>
+                <div class = "form-group">
+                    <button class = "btn btn-outline-info" type = "submit">Create</button>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
+    {% else %}
+        <h3>This page is unavailable</h3>
+    {% endif %}
 
 {% endblock content%}
