@@ -18,14 +18,14 @@ class OrderForm(forms.ModelForm):
     }), validators=[MaxLengthValidator(150)])
     car = ModelChoiceField(empty_label='აირჩიე მანქანა', queryset=Car.objects.all())
     wash_type = ModelChoiceField(queryset=WashType.objects.all(), empty_label='აირჩიე რეცხვის ტიპი')
-    start_date_day = CharField(widget=TextInput(), 
+    start_date_day = CharField(widget=TextInput(),
         validators=[RegexValidator(r'^((21|20)\d\d)[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$',
         message='ფორმატი უნდა იყოს: yyyy-mm-dd'
     )])
     start_date_time = CharField(widget=TextInput(), 
         validators=[RegexValidator(r'^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$', 
         message='ფორმატი უნდა იყოს: HH:MM')])
-
+    #order_time = forms.DateTimeField(widget=forms.TextInput(attrs={'type': 'datetime-local'}))
 
     class Meta:
         model = Order
