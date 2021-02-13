@@ -51,8 +51,8 @@ def detail(request: WSGIRequest, pk: int) -> HttpResponse:
 
 
 @login_required
-def employee_profile(request: WSGIRequest, pk: int) -> HttpResponse:
-    employee = get_object_or_404(EmployeeProfile, id=pk)
+def employee_profile(request: WSGIRequest) -> HttpResponse:
+    employee = request.user.employeeprofile
     order_search_form = OrderSearchForm()
     orders = employee.orders.order_by("-start_date")
 
