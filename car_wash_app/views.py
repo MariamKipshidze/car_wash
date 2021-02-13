@@ -8,7 +8,7 @@ from django.views.generic import CreateView, DeleteView
 
 from .models import Branch, EmployeeProfile, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, CompanyRegisterForm, OrderSearchForm
-from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm
+from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm, CarCreateForm
 
 from django.utils import timezone
 from django.db.models import Count
@@ -189,6 +189,22 @@ def order_create(request: WSGIRequest) -> HttpResponse:
 
     return render(request, "car_wash_app/order_form.html", context={
         "order_form": order_form,
+        })
+
+
+def car_create(request: WSGIRequest) -> HttpResponse:
+    car_form = CarCreateForm()
+
+    if request.method == "POST":
+        car_form = CarCreateForm(request.POST)
+        if car_form.is_valid():
+            car_form.save()
+
+            messages.success(request, f"Successfully created")
+            return HttpResponseRedirect(reverse("home"))
+
+    return render(request, "car_wash_app/car_form.html", context={
+        "car_form": car_form,
         })
 
 
