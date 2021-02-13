@@ -43,7 +43,7 @@ class CarModelAdmin(admin.ModelAdmin):
 @admin.register(Coupon)
 class CouponModelAdmin(admin.ModelAdmin):
     search_fields = ("car_plate",)
-    list_display = ["car_plate", "code", "discount", "expiration_date"]
+    list_display = ["car", "code", "discount", "expiration_date"]
 
 
 @admin.register(WashType)

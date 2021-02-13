@@ -1,6 +1,6 @@
 from django import forms
 from user.models import User
-from .models import CompanyProfile, Order, EmployeeProfile, Car, WashType, CarType, WashType
+from .models import CompanyProfile, Order, EmployeeProfile, Car, WashType, CarType, WashType, Coupon
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MaxLengthValidator, RegexValidator
 from django.forms import CharField, Textarea, ModelChoiceField, TextInput
@@ -40,6 +40,12 @@ class WashTypeForm(forms.ModelForm):
     class Meta:
         model = WashType
         fields = ["name", "percentage"]
+
+
+class CouponForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = ["code", "expiration_date", "discount", "quantity", "car"]
 
 
 class CarCreateForm(forms.ModelForm):

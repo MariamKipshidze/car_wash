@@ -126,27 +126,6 @@ class WashType(models.Model):
         return self.name
 
 
-class Coupon(models.Model):
-    company = models.ForeignKey(
-        CompanyProfile, 
-        on_delete=models.CASCADE,
-        verbose_name=_("Company"),
-        related_name="coupon",
-    )
-    code = models.CharField(max_length=30, unique=True)
-    expiration_date = models.DateTimeField(verbose_name=_('Coupon Expiration Date'), null=True, blank=True)
-    discount = models.IntegerField(verbose_name=_('Discount'), help_text='%')
-    quantity = models.IntegerField(verbose_name=_('Quantity'), default=1)
-    car_plate = models.CharField(max_length=20, verbose_name=_("Car's license plate"))
-
-    def __str__(self):
-        return self.code
-
-    class Meta:
-        verbose_name = _('Coupon')
-        verbose_name_plural = _('Coupons')
-
-
 class Car(models.Model):
     car_type = models.ForeignKey(
         to='CarType',
@@ -161,6 +140,27 @@ class Car(models.Model):
     class Meta:
         verbose_name = _('Car')
         verbose_name_plural = _('Cars')
+
+
+class Coupon(models.Model):
+    company = models.ForeignKey(
+        CompanyProfile, 
+        on_delete=models.CASCADE,
+        verbose_name=_("Company"),
+        related_name="coupon",
+    )
+    code = models.CharField(max_length=30, unique=True)
+    expiration_date = models.DateTimeField(verbose_name=_('Coupon Expiration Date'), null=True, blank=True)
+    discount = models.IntegerField(verbose_name=_('Discount'), help_text='%')
+    quantity = models.IntegerField(verbose_name=_('Quantity'), default=1)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name=_("Car"), related_name="car_coupon", default=1)
+
+    def __str__(self):
+        return self.code
+
+    class Meta:
+        verbose_name = _('Coupon')
+        verbose_name_plural = _('Coupons')
 
 
 class Order(models.Model):
