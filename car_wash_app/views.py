@@ -9,7 +9,7 @@ from django.views.generic import CreateView, DeleteView
 from .models import Branch, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, CompanyRegisterForm, OrderSearchForm
 from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm, CarCreateForm
-from .forms import CarTypeForm, WashTypeForm, LocationForm, BranchForm
+from .forms import CarTypeForm, WashTypeForm, LocationForm, BranchForm, CouponForm
 
 from django.utils import timezone
 from django.db.models import Count
@@ -269,6 +269,17 @@ def branch_create(request: WSGIRequest) -> HttpResponse:
         "branch_form": branch_form,
         "location_form": location_form,
         })
+
+
+class CouponCreateView(LoginRequiredMixin, CreateView):
+    form_class = CouponForm
+    template_name = 'car_wash_app/coupon_form.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.company = self.request.user.company
+        messages.success(self.request, f"Coupon created successfully!")
+        return super().form_valid(form)
 
 
 class BranchDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
