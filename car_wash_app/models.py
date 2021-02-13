@@ -153,7 +153,7 @@ class Coupon(models.Model):
     expiration_date = models.DateTimeField(verbose_name=_('Coupon Expiration Date'), null=True, blank=True)
     discount = models.IntegerField(verbose_name=_('Discount'), help_text='%')
     quantity = models.IntegerField(verbose_name=_('Quantity'), default=1)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name=_("Car"), related_name="car_coupon", default=1)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name=_("Car"), related_name="car_coupon")
 
     def __str__(self):
         return self.code
