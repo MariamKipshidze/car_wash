@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views as user_views 
-from .views import home, detail, profile, BranchCreateView, order_create
+from .views import home, detail, profile, BranchCreateView, order_create, car_type_create
 from .views import employee_profile, employee_register, BranchDeleteView, car_create
 from django.conf import settings
 from django.conf.urls.static import static
@@ -16,6 +16,7 @@ urlpatterns = [
     path("order/new/", user_views.order_create, name="order-create"),
     path("branch/<int:pk>/delete/", BranchDeleteView.as_view(), name="branch-delete"),
     path('car/new/', user_views.car_create, name = "car-register"),
+    path('car/type/new/', user_views.car_type_create, name = "car-type-register"),
 ]
 
 if settings.DEBUG:

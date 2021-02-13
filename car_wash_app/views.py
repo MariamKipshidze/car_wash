@@ -9,6 +9,7 @@ from django.views.generic import CreateView, DeleteView
 from .models import Branch, EmployeeProfile, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, CompanyRegisterForm, OrderSearchForm
 from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm, CarCreateForm
+from .forms import CarTypeForm
 
 from django.utils import timezone
 from django.db.models import Count
@@ -205,6 +206,30 @@ def car_create(request: WSGIRequest) -> HttpResponse:
 
     return render(request, "car_wash_app/car_form.html", context={
         "car_form": car_form,
+        })
+
+
+@login_required
+def car_type_create(request: WSGIRequest) -> HttpResponse:
+    car_type_form = CarTypeForm()
+
+    if request.method == "POST":
+        car_type_form = CarTypeForm(request.POST)
+        if car_type_form.is_valid():
+            car_type = car_type_form.save(commit=False)
+
+            if request.user.status == 1:
+                car_type.company = request.user.company
+            else:
+                car_type.company = request.user.employeeprofile.branch.company
+
+            car_type.save()
+
+            messages.success(request, f"Successfully created")
+            return HttpResponseRedirect(reverse("home"))
+
+    return render(request, "car_wash_app/car_type_form.html", context={
+        "car_type_form": car_type_form,
         })
 
 
