@@ -23,7 +23,6 @@ class OrderForm(forms.ModelForm):
     start_date_time = CharField(
         widget=TextInput(),
         validators=[RegexValidator(r'^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$', message='ფორმატი უნდა იყოს: HH:MM')])
-    # order_time = forms.DateTimeField(widget=forms.TextInput(attrs={'type': 'datetime-local'}))
 
     class Meta:
         model = Order
@@ -43,6 +42,8 @@ class WashTypeForm(forms.ModelForm):
 
 
 class CouponForm(forms.ModelForm):
+    expiration_date = forms.DateTimeField(widget=forms.TextInput(attrs={'type': 'datetime-local'}))
+
     class Meta:
         model = Coupon
         fields = ["code", "expiration_date", "discount", "quantity", "car"]
