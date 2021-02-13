@@ -6,9 +6,10 @@ from user.models import User
 from PIL import Image
 from django.urls import reverse
 
+
 class Location(models.Model):
-    city = models.CharField(max_length = 255, verbose_name = _("City"))
-    street_address = models.CharField(max_length = 255, verbose_name = _('Street Address'))
+    city = models.CharField(max_length=255, verbose_name=_("City"))
+    street_address = models.CharField(max_length=255, verbose_name=_('Street Address'))
 
     def __str__(self):
         return f'{self.city} : {self.street_address}'
@@ -24,13 +25,13 @@ class CompanyProfile(models.Model):
         verbose_name=_("Company"), 
         related_name="company",
     )
-    name  = models.CharField(max_length=100, verbose_name=_("Company Name"),null = True, blank = True)
+    name = models.CharField(max_length=100, verbose_name=_("Company Name"), null=True, blank=True)
     image = models.ImageField(default="default_logo.jpg", upload_to="logo_pics", verbose_name=_("Image"))
     mobile_number = models.CharField(
         max_length=20, 
         verbose_name=_("Mobile Number"),
-        null = True, 
-        blank = True,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
@@ -41,7 +42,7 @@ class CompanyProfile(models.Model):
         img = Image.open(self.image.path)
 
         if img.height > 300 or img.width > 300:
-            output_size = (300,300)
+            output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
 
@@ -53,10 +54,10 @@ class Branch(models.Model):
         verbose_name=_("Company"), 
         related_name="branch",
     )
-    title = models.CharField(max_length = 255, verbose_name=_('Branch'))
-    location = models.OneToOneField(Location, on_delete = models.PROTECT, verbose_name = _("Location"))
+    title = models.CharField(max_length=255, verbose_name=_('Branch'))
+    location = models.OneToOneField(Location, on_delete=models.PROTECT, verbose_name=_("Location"))
     description = models.TextField(verbose_name=_("Description"))
-    image = models.ImageField(null = True, blank = True, upload_to = "pictures", verbose_name=_("Image"))
+    image = models.ImageField(null=True, blank=True, upload_to="pictures", verbose_name=_("Image"))
 
     def __str__(self):
         return self.title
@@ -79,11 +80,11 @@ class EmployeeProfile(models.Model):
     full_name = models.CharField(_("Full Name"), max_length = 255)
     age = models.PositiveSmallIntegerField(_("Age"))
     mobile_number = models.CharField(max_length=20, verbose_name=_("Mobile Number"))
-    manager = models.BooleanField(default = False, verbose_name = _("Manager"))
+    manager = models.BooleanField(default=False, verbose_name=_("Manager"))
     branch = models.ForeignKey(
         Branch, 
-        on_delete = models.CASCADE, 
-        verbose_name = _("Branch"), 
+        on_delete=models.CASCADE,
+        verbose_name=_("Branch"),
         related_name="employee",
     )
     salary = models.DecimalField(
@@ -99,7 +100,7 @@ class EmployeeProfile(models.Model):
             UniqueConstraint(
                 fields=['branch'], 
                 condition=Q(manager=True),
-                name = "unique_together_manager_branch",
+                name="unique_together_manager_branch",
             )
         ]
         
@@ -129,8 +130,8 @@ class Coupon(models.Model):
     company = models.ForeignKey(
         CompanyProfile, 
         on_delete=models.CASCADE,
-         verbose_name=_("Company"),
-          related_name="coupon",
+        verbose_name=_("Company"),
+        related_name="coupon",
     )
     code = models.CharField(max_length=30, unique=True)
     expiration_date = models.DateTimeField(verbose_name=_('Coupon Expiration Date'), null=True, blank=True)
@@ -188,7 +189,7 @@ class Order(models.Model):
 
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_("Created date"))
     start_date = models.DateTimeField(verbose_name=_('Scheduled time'))
-    end_date = models.DateTimeField(verbose_name=_('End time'),null=True, blank=True)
+    end_date = models.DateTimeField(verbose_name=_('End time'), null=True, blank=True)
 
     def __str__(self):
         return f'{self.car} using {self.wash_type}'
@@ -202,4 +203,3 @@ class Order(models.Model):
         if not self.pk:
             self.price = self.car.car_type.washing_cost * self.wash_type.percentage / 100
         super(Order, self).save(*args, **kwargs)
-
