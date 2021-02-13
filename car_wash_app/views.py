@@ -102,8 +102,8 @@ def employee_profile(request: WSGIRequest) -> HttpResponse:
 
 
 @login_required
-def profile(request: WSGIRequest, pk: int) -> HttpResponse:
-    company = get_object_or_404(CompanyProfile, id=pk)
+def profile(request: WSGIRequest) -> HttpResponse:
+    company = request.user.company
     branches = company.branch.all()
     user_update_form = UserUpdateForm(instance=request.user)
     profile_update_form = ProfileUpdateForm(instance=request.user.company)
