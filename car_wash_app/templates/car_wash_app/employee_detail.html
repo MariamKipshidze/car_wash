@@ -14,7 +14,6 @@
 <div class = "content-section">
     <div>
     <form method = "GET" action=".">
-      {% csrf_token %}
       {{order_search_form|crispy}}
       <div class = "form-group">
           <button class = "btn btn-outline-info" type = "submit">Filter</button>
