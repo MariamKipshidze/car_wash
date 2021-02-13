@@ -9,7 +9,7 @@ from django.views.generic import CreateView, DeleteView
 from .models import Branch, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, CompanyRegisterForm, OrderSearchForm
 from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm, CarCreateForm
-from .forms import CarTypeForm
+from .forms import CarTypeForm, WashTypeForm
 
 from django.utils import timezone
 from django.db.models import Count
@@ -230,6 +230,30 @@ def car_type_create(request: WSGIRequest) -> HttpResponse:
 
     return render(request, "car_wash_app/car_type_form.html", context={
         "car_type_form": car_type_form,
+        })
+
+
+@login_required
+def wash_type_create(request: WSGIRequest) -> HttpResponse:
+    wash_type_form = WashTypeForm()
+
+    if request.method == "POST":
+        wash_type_form = WashTypeForm(request.POST)
+        if wash_type_form.is_valid():
+            wash_type = wash_type_form.save(commit=False)
+
+            if request.user.status == 1:
+                wash_type.company = request.user.company
+            else:
+                wash_type.company = request.user.employeeprofile.branch.company
+
+            wash_type.save()
+
+            messages.success(request, f"Successfully created")
+            return HttpResponseRedirect(reverse("home"))
+
+    return render(request, "car_wash_app/wash_type_form.html", context={
+        "wash_type_form": wash_type_form,
         })
 
 
