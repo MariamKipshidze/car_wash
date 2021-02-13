@@ -217,12 +217,7 @@ def car_type_create(request: WSGIRequest) -> HttpResponse:
         car_type_form = CarTypeForm(request.POST)
         if car_type_form.is_valid():
             car_type = car_type_form.save(commit=False)
-
-            if request.user.status == 1:
-                car_type.company = request.user.company
-            else:
-                car_type.company = request.user.employeeprofile.branch.company
-
+            car_type.company = request.user.company
             car_type.save()
 
             messages.success(request, f"Successfully created")
@@ -241,12 +236,7 @@ def wash_type_create(request: WSGIRequest) -> HttpResponse:
         wash_type_form = WashTypeForm(request.POST)
         if wash_type_form.is_valid():
             wash_type = wash_type_form.save(commit=False)
-
-            if request.user.status == 1:
-                wash_type.company = request.user.company
-            else:
-                wash_type.company = request.user.employeeprofile.branch.company
-
+            wash_type.company = request.user.company
             wash_type.save()
 
             messages.success(request, f"Successfully created")
