@@ -15,12 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from car_wash_app import views as user_views
+from car_wash_app.views import company_register
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("login/", auth_views.LoginView.as_view(template_name  = "car_wash_app/login.html"), name = "login"),
+    path("logout/", auth_views.LogoutView.as_view(template_name = "car_wash_app/logout.html"), name = "logout"),
+    path('company/register/', user_views.company_register, name = "company-register"),
     path('', include("car_wash_app.urls")),
 ]
 
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
