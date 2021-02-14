@@ -25,7 +25,7 @@ def home(request: WSGIRequest) -> HttpResponse:
     q = request.GET.get('q')
 
     if q:
-        branches = Branch.objects.filter(title__icontains=q)
+        branches = Branch.objects.filter(Q(company__name__icontains=q)|Q(title__icontains=q))
 
     page = request.GET.get('page', 1)
     paginator = Paginator(branches, 5)
