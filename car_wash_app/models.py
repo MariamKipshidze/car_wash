@@ -208,8 +208,3 @@ class Order(models.Model):
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
         unique_together = ['employee', 'start_date']
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.price = self.car.car_type.washing_cost * self.wash_type.percentage / 100
-        super(Order, self).save(*args, **kwargs)

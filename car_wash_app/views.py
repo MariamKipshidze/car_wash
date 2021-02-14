@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.generic import CreateView, DeleteView
 
-from .models import Branch, CompanyProfile
+from .models import Branch, CompanyProfile, CompanyCarType
 from .forms import ProfileUpdateForm, UserUpdateForm, CompanyRegisterForm, OrderSearchForm
 from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm, CarCreateForm
 from .forms import CompanyCarTypeForm, WashTypeForm, LocationForm, BranchForm, CouponForm
@@ -181,8 +181,15 @@ def order_create(request: WSGIRequest) -> HttpResponse:
         order_form = OrderForm(company, request.POST)
         if order_form.is_valid():
             order = order_form.save(commit=False)
+
+            wash_type_percentage = order_form.cleaned_data["wash_type"].percentage
+            car_type = order_form.cleaned_data["car"].car_type
+
+            car_type_price = get_object_or_404(CompanyCarType, company=company, car_type=car_type).washing_cost
             order.start_date = order_form.cleaned_data["start_date_day"] + \
             " " + order_form.cleaned_data["start_date_time"]
+            order.price = (wash_type_percentage*car_type_price)/100
+
             order.save()
 
             messages.success(request, f"Successfully booked")
