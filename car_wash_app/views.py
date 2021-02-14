@@ -189,6 +189,8 @@ def order_create(request: WSGIRequest) -> HttpResponse:
             order.start_date = order_form.cleaned_data["start_date_day"] + \
             " " + order_form.cleaned_data["start_date_time"]
             car = order_form.cleaned_data["car"]
+            employee = order_form.cleaned_data["employee"]
+            order.employee_order_percentage = employee.order_percentage
 
             order.price = (wash_type_percentage*car_type_price)/100
 

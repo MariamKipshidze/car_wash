@@ -183,7 +183,7 @@ class Order(models.Model):
         to='EmployeeProfile', on_delete=models.SET_NULL,
         null=True, related_name='orders',
     )
-    employee_order_percentage = models.IntegerField(_("Employee percetage from order price"), default=10)
+    employee_order_percentage = models.IntegerField(_("Employee percetage from order price"))
     coupon = models.ForeignKey(
         to='Coupon', related_name='orders',
         on_delete=models.SET_NULL,
