@@ -6,12 +6,6 @@
     <div class="media-body">
       <div class="article-metadata">
         <h1 class="article-title" >{{ branch.company }}</h1>
-        <!-- {% if object.author == user %}
-        <div>
-          <a  class = "btn btn-secondary btn-sm mt-1 mb-1" href = "{% url 'post-update' object.id %}">Update</a>
-          <a  class = "btn btn-danger btn-sm mt-1 mb-1" href = "{% url 'post-delete' object.id %}">Delete</a>
-        </div>
-        {% endif %} -->
       </div>
       <h2 class="article-title" >{{ branch.title }}</h2>
       <p class="article-content">Location: {{ branch.location }}</p>
@@ -20,9 +14,13 @@
       {% if branch.image %}
           <img class = "article-img" src = "{{ branch.image.url }}">
       {% endif %}
-      {% for employee in employees %}
-        <a class="nav-item nav-link" href="{% url 'employee-detail' employee.id %}">{{ employee.full_name}}</a>
-      {% endfor %}
+      <article class="media content-section">
+        <div class="media-body">
+          {% for car in car_type %}
+          <p class="article-content">{{ car.car_type}} | {{ car.washing_cost}} ₾</p>
+          {% endfor %}
+        </div>
+      </article>
     </div>
 </article>
 {% endblock content%}

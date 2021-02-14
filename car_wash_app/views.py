@@ -43,11 +43,11 @@ def home(request: WSGIRequest) -> HttpResponse:
 
 def detail(request: WSGIRequest, pk: int) -> HttpResponse:
     branch = get_object_or_404(Branch, id=pk)
-    employees = branch.employee.all()
+    car_type = CompanyCarType.objects.filter(company=branch.company)
 
     return render(request, 'car_wash_app/branch_detail.html', context={
         'branch': branch,
-        'employees': employees,
+        'car_type': car_type,
     })
 
 

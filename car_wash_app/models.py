@@ -116,7 +116,7 @@ class CarType(models.Model):
 
 
 class CompanyCarType(models.Model):
-    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"))
+    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company_car"))
     car_type = models.ForeignKey(CarType, on_delete=models.PROTECT, verbose_name=_("Car Type"), related_name="company_car_type")
     washing_cost = models.SmallIntegerField(_("Cost"))
 
