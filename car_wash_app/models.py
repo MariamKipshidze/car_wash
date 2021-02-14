@@ -109,12 +109,19 @@ class EmployeeProfile(models.Model):
 
 
 class CarType(models.Model):
-    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"))
     model_type = models.CharField(_("Car Model"), max_length=100)
-    washing_cost = models.SmallIntegerField(_("Cost"))
 
     def __str__(self):
         return self.model_type
+
+
+class CompanyCarType(models.Model):
+    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"))
+    car_type = models.ForeignKey(CarType, on_delete=models.PROTECT, verbose_name=_("Car Type"), related_name="company_car_type")
+    washing_cost = models.SmallIntegerField(_("Cost"))
+
+    def __str__(self):
+        return self.car_type.model_type
 
 
 class WashType(models.Model):

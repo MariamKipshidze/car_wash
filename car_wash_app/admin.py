@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import EmployeeProfile, Location, Branch
 from .models import CompanyProfile, Order, CarType
-from .models import Car, Coupon, WashType
+from .models import Car, Coupon, WashType, CompanyCarType
 
 
 @admin.register(EmployeeProfile)
@@ -31,7 +31,13 @@ class CompanyProfileModelAdmin(admin.ModelAdmin):
 @admin.register(CarType)
 class CarTypeModelAdmin(admin.ModelAdmin):
     search_fields = ("model_type",)
-    list_display = ["model_type", "washing_cost", "company"]
+    list_display = ["model_type"]
+
+
+@admin.register(CompanyCarType)
+class CompanyCarTypeModelAdmin(admin.ModelAdmin):
+    search_fields = ("car_type",)
+    list_display = ["car_type", "washing_cost", "company"]
 
 
 @admin.register(Car)
@@ -43,7 +49,7 @@ class CarModelAdmin(admin.ModelAdmin):
 @admin.register(Coupon)
 class CouponModelAdmin(admin.ModelAdmin):
     search_fields = ("car_plate",)
-    list_display = ["car", "code", "discount", "expiration_date"]
+    list_display = ["car", "code", "company", "discount", "expiration_date"]
 
 
 @admin.register(WashType)

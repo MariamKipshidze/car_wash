@@ -1,7 +1,7 @@
 from django import forms
 from user.models import User
 from .models import CompanyProfile, Order, EmployeeProfile, Car, WashType
-from .models import Location, Coupon, WashType, CarType, Branch
+from .models import Location, Coupon, WashType, CompanyCarType, Branch
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MaxLengthValidator, RegexValidator
 from django.forms import CharField, Textarea, ModelChoiceField, TextInput
@@ -31,10 +31,10 @@ class OrderForm(forms.ModelForm):
         fields = ('branch', 'employee', 'car', "wash_type", 'start_date_day', 'start_date_time', "note", )
 
 
-class CarTypeForm(forms.ModelForm):
+class CompanyCarTypeForm(forms.ModelForm):
     class Meta:
-        model = CarType
-        fields = ["model_type", "washing_cost"]
+        model = CompanyCarType
+        fields = ["car_type", "washing_cost"]
 
 
 class WashTypeForm(forms.ModelForm):

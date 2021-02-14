@@ -9,7 +9,7 @@ from django.views.generic import CreateView, DeleteView
 from .models import Branch, CompanyProfile
 from .forms import ProfileUpdateForm, UserUpdateForm, CompanyRegisterForm, OrderSearchForm
 from .forms import EmployeeRegisterForm, EmployeeProfileRegisterForm, OrderForm, CarCreateForm
-from .forms import CarTypeForm, WashTypeForm, LocationForm, BranchForm, CouponForm
+from .forms import CompanyCarTypeForm, WashTypeForm, LocationForm, BranchForm, CouponForm
 
 from django.utils import timezone
 from django.db.models import Count
@@ -211,10 +211,10 @@ def car_create(request: WSGIRequest) -> HttpResponse:
 
 @login_required
 def car_type_create(request: WSGIRequest) -> HttpResponse:
-    car_type_form = CarTypeForm()
+    car_type_form = CompanyCarTypeForm()
 
     if request.method == "POST":
-        car_type_form = CarTypeForm(request.POST)
+        car_type_form = CompanyCarTypeForm(request.POST)
         if car_type_form.is_valid():
             car_type = car_type_form.save(commit=False)
             car_type.company = request.user.company
