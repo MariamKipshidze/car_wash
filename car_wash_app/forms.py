@@ -12,6 +12,7 @@ class OrderForm(forms.ModelForm):
         super(OrderForm, self).__init__(*args, **kwargs)
         self.fields['branch'].queryset = self.fields['branch'].queryset.filter(company=current_company)
         self.fields['employee'].queryset = self.fields['employee'].queryset.filter(branch__company=current_company)
+        self.fields['wash_type'].queryset = self.fields['wash_type'].queryset.filter(company=current_company)
     
     note = CharField(widget=Textarea(), validators=[MaxLengthValidator(150)])
     car = ModelChoiceField(empty_label='აირჩიე მანქანა', queryset=Car.objects.all())
