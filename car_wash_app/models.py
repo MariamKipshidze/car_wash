@@ -186,7 +186,7 @@ class Order(models.Model):
     employee_order_percentage = models.IntegerField(_("Employee percetage from order price"), default=10)
     coupon = models.ForeignKey(
         to='Coupon', related_name='orders',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         null=True, blank=True,
     )
     wash_type = models.ForeignKey(
