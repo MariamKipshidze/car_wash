@@ -210,21 +210,21 @@ def car_create(request: WSGIRequest) -> HttpResponse:
 
 
 @login_required
-def car_type_create(request: WSGIRequest) -> HttpResponse:
-    car_type_form = CompanyCarTypeForm()
+def company_car_type_create(request: WSGIRequest) -> HttpResponse:
+    company_car_type_form = CompanyCarTypeForm()
 
     if request.method == "POST":
-        car_type_form = CompanyCarTypeForm(request.POST)
-        if car_type_form.is_valid():
-            car_type = car_type_form.save(commit=False)
-            car_type.company = request.user.company
-            car_type.save()
+        company_car_type_form = CompanyCarTypeForm(request.POST)
+        if company_car_type_form.is_valid():
+            company_car_type = company_car_type_form.save(commit=False)
+            company_car_type.company = request.user.company
+            company_car_type.save()
 
             messages.success(request, f"Successfully created")
             return HttpResponseRedirect(reverse("home"))
 
-    return render(request, "car_wash_app/car_type_form.html", context={
-        "car_type_form": car_type_form,
+    return render(request, "car_wash_app/company_car_type_form.html", context={
+        "company_car_type_form": company_car_type_form,
         })
 
 
