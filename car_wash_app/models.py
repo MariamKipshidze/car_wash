@@ -123,6 +123,9 @@ class CompanyCarType(models.Model):
     def __str__(self):
         return self.car_type.model_type
 
+    class Meta:
+        unique_together = ['company', 'car_type']
+
 
 class WashType(models.Model):
     company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, verbose_name=_("Company"))
