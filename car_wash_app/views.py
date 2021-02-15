@@ -194,12 +194,13 @@ def order_create(request: WSGIRequest) -> HttpResponse:
 
             order.price = (wash_type_percentage*car_type_price)/100
 
-            if Coupon.objects.filter(Q(car=car)|Q(company=company)).exists():
-                coupon = get_object_or_404(Coupon, car=car, company=company)
-                if coupon.quantity != 0 and coupon.expiration_date > timezone.now():
-                    coupon.quantity = coupon.quantity - 1
-                    coupon.save()
-                    order.price = (order.price*(100-coupon.discount))/100
+            if Coupon.objects.filter(Q(car=car),Q(company=company)).exists():
+                coupons = Coupon.objects.filter(Q(car=car),Q(company=company))
+                for coupon in coupons:
+                    if coupon.quantity != 0 and coupon.expiration_date > timezone.now():
+                        coupon.quantity = coupon.quantity - 1
+                        coupon.save()
+                        order.price = (order.price*(100-coupon.discount))/100
 
             order.save()
 
