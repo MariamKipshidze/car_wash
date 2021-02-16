@@ -22,8 +22,12 @@ from car_wash_app.views import company_register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("login/", auth_views.LoginView.as_view(template_name="car_wash_app/login.html"), name="login"),
-    path("logout/", auth_views.LogoutView.as_view(template_name="car_wash_app/logout.html"), name="logout"),
+    path("login/", auth_views.LoginView.as_view(template_name="user/login.html"), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(template_name="user/logout.html"), name="logout"),
+    path("password-reset/", auth_views.PasswordResetView.as_view(template_name = "user/password_reset.html"), name = "password_reset"),
+    path("password-reset/done/", auth_views.PasswordResetDoneView.as_view(template_name = "user/password_reset_done.html"), name = "password_reset_done"),
+    path("password-reset-confirm/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(template_name = "user/password_reset_confirm.html"), name = "password_reset_confirm"),
+    path("password-reset-complete/", auth_views.PasswordResetCompleteView.as_view(template_name = "user/password_reset_complete.html"), name = "password_reset_complete"),
     path('company/register/', user_views.company_register, name="company-register"),
     path('', include("car_wash_app.urls")),
 ]
