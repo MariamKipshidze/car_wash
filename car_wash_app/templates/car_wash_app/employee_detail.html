@@ -18,7 +18,7 @@
       <div class = "form-group">
           <button class = "btn btn-outline-info" type = "submit">Filter</button>
           {% if earned_money and washed_amount %}
-            <p><strong>Earned money from orders:</strong>  {{earned_money}} </p>
+            <p><strong>Earned money from orders:</strong>  {{earned_money|floatformat:2}} </p>
             <p><strong>Washed amount: </strong>  {{washed_amount}} </p>
           {% endif %}
       </div>
