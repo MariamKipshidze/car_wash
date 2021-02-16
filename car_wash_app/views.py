@@ -1,6 +1,6 @@
 import datetime 
 from decimal import Decimal
-from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Q
+from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Q, Window
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -196,13 +196,14 @@ def order_create(request: WSGIRequest) -> HttpResponse:
 
             if Coupon.objects.filter(Q(car=car),Q(company=company)).exists():
                 coupons = Coupon.objects.filter(Q(car=car),Q(company=company))
+                #TODO change for loop with aggregate and annotate logic
                 for coupon in coupons:
                     if coupon.quantity != 0 and coupon.expiration_date > timezone.now():
                         coupon.quantity = coupon.quantity - 1
                         coupon.save()
                         order.price = (order.price*(100-coupon.discount))/100
 
-            order.save()
+            order.save() 
 
             messages.success(request, f"Successfully booked")
             return HttpResponseRedirect(reverse("order-create"))
