@@ -186,8 +186,20 @@ def order_create(request: WSGIRequest) -> HttpResponse:
             car_type = order_form.cleaned_data["car"].car_type
 
             car_type_price = get_object_or_404(CompanyCarType, company=company, car_type=car_type).washing_cost
-            order.start_date = order_form.cleaned_data["start_date_day"] + \
-            " " + order_form.cleaned_data["start_date_time"]
+
+            try:
+                start_date = datetime.datetime.strptime(
+                    " ".join([
+                        order_form.cleaned_data['start_date_day'],
+                        order_form.cleaned_data['start_date_time']
+                    ]),
+                    '%Y-%m-%d %H:%M'
+                )
+                order.start_date = start_date
+            except ValueError:
+                order_form.add_error('start_date_day', 'Date format is incorrect')
+
+
             car = order_form.cleaned_data["car"]
             employee = order_form.cleaned_data["employee"]
             order.employee_order_percentage = employee.order_percentage
