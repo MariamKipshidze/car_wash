@@ -132,7 +132,7 @@ def profile(request: WSGIRequest) -> HttpResponse:
 
 
 def company_register(request: WSGIRequest) -> HttpResponse:
-    company_register_form = CompanyRegisterForm()
+    company_register_form = CompanyRegisterForm(initial={"email": "Email"})
     if request.method == "POST":
         company_register_form = CompanyRegisterForm(request.POST)
         if company_register_form.is_valid():
