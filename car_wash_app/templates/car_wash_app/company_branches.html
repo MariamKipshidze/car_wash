@@ -1,0 +1,19 @@
+{% extends "car_wash_app/base.html" %}
+
+{% block content %}
+    {% for branch in branches %}
+    <article class="media content-section">
+        <img class = "rounded-circle article-img" src = "{{ branch.company.image.url }}">
+        <div class="media-body">
+        <div class="article-metadata">
+            <h1>{{ branch.company }}</h1>
+        </div>
+        <h2><a class="article-title" href="{% url 'branch-detail' branch.id %}">{{ branch.title }}</a></h2>
+        <p class="article-content">{{ branch.location }}</p>
+        {% if branch.image %}
+            <img class = "article-img" src = "{{ branch.image.url }}">
+        {% endif %}
+        </div>
+    </article>
+    {% endfor %}
+{% endblock content%}

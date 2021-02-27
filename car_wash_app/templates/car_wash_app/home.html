@@ -14,7 +14,7 @@
       <img class = "rounded-circle article-img" src = "{{ branch.company.image.url }}">
       <div class="media-body">
         <div class="article-metadata">
-          <h1>{{ branch.company }}</h1>
+          <h1><a href="{% url 'company-branches' branch.company.id %}" >{{ branch.company }}</a></h1>
         </div>
         <h2><a class="article-title" href="{% url 'branch-detail' branch.id %}">{{ branch.title }}</a></h2>
         <p class="article-content">{{ branch.location }}</p>

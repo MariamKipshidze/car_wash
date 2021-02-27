@@ -4,7 +4,7 @@ from django.db.models import F, Sum, ExpressionWrapper, DecimalField, Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, DeleteView, ListView
 
 from .models import Branch, CompanyProfile, CompanyCarType, Coupon
 from .forms import ProfileUpdateForm, UserUpdateForm, CompanyRegisterForm, OrderSearchForm
@@ -322,3 +322,13 @@ class BranchDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user.company == branch.company:
             return True
         return False
+
+
+class ComapnyBranchListView(ListView):
+    model = Branch
+    template_name = "car_wash_app/company_branches.html"
+    context_object_name = "branches"
+
+    def get_queryset(self):
+        company = get_object_or_404(CompanyProfile, id=self.kwargs.get("pk"))
+        return Branch.objects.filter(company=company).all()
